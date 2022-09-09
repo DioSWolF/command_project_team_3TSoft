@@ -94,5 +94,5 @@ def main():
 
 if __name__ == "__main__":
     notes_save = NotesSave()
-    notes_save.load_data(
+    notes_save.load_data()
     main()
