@@ -26,9 +26,6 @@ class NotesSave(UserDict):
     
     def add_record(self, notes: Notes)-> None:
         self.data[notes.article.value] = notes
-    
-    def write_notes(self, notes: Notes):
-        self.data[notes.article.value] 
         
     def save_data(self):
         with open("data.bin", "wb") as file:
