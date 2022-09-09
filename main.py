@@ -87,9 +87,12 @@ def main():
             print(resalt)
         except SystemExit as e:
             print(e)
+            notes_save.save_data()
             break
+
 
 
 if __name__ == "__main__":
     notes_save = NotesSave()
+    notes_save.load_data(
     main()
