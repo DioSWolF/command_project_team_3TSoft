@@ -30,14 +30,19 @@ class NotesSave(UserDict):
     def write_notes(self, notes: Notes):
         self.data[notes.article.value] 
         
-    def save_notes(self, *args):
-        with open("notes.bin", "wb") as file:
+    def save_data(self):
+        with open("data.bin", "wb") as file:
             pickle.dump(self.data, file)
-        return "The notes has been saved"
 
-    def load_notes():
-        with open("notes.bin", "rb") as file:
-            return pickle.load(file)
+    def load_data(self):
+        try:
+            with open("data.bin", "rb") as file:
+                return pickle.load(file)
+        except FileNotFoundError:
+            with open("data.bin", "wb") as file:
+                pickle.dump("", file)
+            with open("data.bin", "rb") as file:
+                return pickle.load(file)
 
 
 
