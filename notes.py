@@ -20,13 +20,16 @@ class Notes():
         self.article = article
         self.text_notes = text_notes
         self.key_words = key_words
-
+    
     
 class NotesSave(UserDict):
     
     def add_record(self, notes: Notes)-> None:
-        self.data[notes.article.value] = notes
-        
+        self.data[notes.article.value] = [notes.text_notes, notes.key_words]
+    
+    def __repr__(self, notes: Notes) -> str:
+        return f'{notes.article}, {notes.text_notes}, {notes.key_words}'
+    
     def save_data(self):
         with open("data.bin", "wb") as file:
             pickle.dump(self.data, file)

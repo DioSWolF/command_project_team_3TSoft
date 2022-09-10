@@ -7,7 +7,80 @@ def exit_handler():
     raise SystemExit('Good bye!')
 
 def add_new_note():
-    pass
+    article = input("\n>>> 0 to enter the menu.\nWrite article note: ").strip()
+
+    if article == "0":
+        return
+    
+    if article in notes_save.data:
+        return "\nYou have a contact with this name! Choose another name."
+
+    article = Article(article)
+
+    text_notes = TextNotes(input('\nEnter text note: '))
+    key_words = KeyWords((input('\nEnter  key words note: ')).split(' '))
+    note = Notes(article, text_notes, key_words)
+    notes_save.add_record(note)
+    
+    return write_in_field(notes_save, note)
+
+def write_in_field(notes_save: NotesSave, note : Notes):
+    user_chose = ""
+
+    while user_chose != '0':
+        rec_list_print =  f"Article: {', '.join(note.article)}", f"text_notes: {', '.join(note.text_notes)}", f"Key words: {'; '.join(note.key_words)}"
+        list_fiel_text = f"\nContact name: {note.article.value}\n\nAdd to field:\n"
+        
+        i = 1
+        for items in rec_list_print:
+            list_fiel_text += f"{i}: {items}\n"
+            i += 1
+
+        list_fiel_text += f"\n>>> 0: Exit to main menu\n"
+
+        print(list_fiel_text)
+
+        user_chose = input("Select the field number to fill in: ").strip()
+        user_chose = ADD_FUNC_DICT.get(str(user_chose), error_chose)
+        user_chose = user_chose(note)
+        print(user_chose)
+        notes_save.add_record(note)
+
+def write_kye_words_field(note: Notes) -> None:
+    user_input = input("\n>>> 0: To enter the contact menu.\nWrite email number: ").strip()
+
+    if user_input == "0":
+        return
+
+    if note.key_words == "":
+        note.key_words = [KeyWords(user_input).value]
+    else:
+        note.key_words.append(KeyWords(user_input).value)
+
+
+def write_text_notes_field(note: Notes) -> None:
+    user_input = input("\n>>> 0: To enter the contact menu.\nWrite text notes: ")
+
+    if user_input == "0":
+        return
+
+    if note.text_notes == "":
+
+        note.text_notes = [TextNotes(user_input).value]
+    else:
+        note.text_notes.append(TextNotes(user_input).value)
+
+def error_chose(*_):
+    return "\n<<<You chose invalid. Try again>>>"
+
+def close_bot(*_):
+    return "0"
+
+ADD_FUNC_DICT = {   "0" : close_bot, 
+                    "2" : write_kye_words_field,
+                    "5" : write_text_notes_field,
+                }
+
 
 def note_change_time():
     pass
