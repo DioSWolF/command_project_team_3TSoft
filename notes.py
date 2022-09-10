@@ -28,14 +28,14 @@ class Notes():
             self.text_note = text_note
 
         if key_words is None:
-            self.key_words = ""
+            self.key_words = []
         else:
             self.key_words = key_words
     
 class NotesSave(UserDict):
     
     def add_record(self, notes: Notes)-> None:
-        self.data[notes.article.value] = [notes.text_note, notes.key_words]
+        self.data[notes.article.value] = notes
     
     def __repr__(self, notes: Notes) -> str:
         return f'{notes.article}, {notes.text_note}, {notes.key_words}'

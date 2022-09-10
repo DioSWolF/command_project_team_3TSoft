@@ -3,39 +3,38 @@ from notes import Article, TextNote, KeyWords, Notes, NotesSave
 
 
 def add_new_note():
-    article = input("\n>>> 0 to enter the menu.\n\nWrite article note: ").strip()
+    article = input("\n>>> 0: Exit to main menu\n\nWrite article note: ").strip()
 
     if article == "0":
         return
     
     if article in notes_save.data:
-        return "\nYou have a contact with this name! Choose another name."
+        return "\nYou have a note with this article! Choose another articl."
 
     article = Article(article)
 
-    text_note = TextNote(input('\nWrite text note: '))
-    key_words = KeyWords((input('\nWrite key words note: ')).split(' '))
+    text_note = TextNote("")
+    key_words = [KeyWords('')]
     note = Notes(article, text_note, key_words)
     notes_save.add_record(note)
-    
     return write_in_field(notes_save, note)
 
 def write_in_field(notes_save: NotesSave, note : Notes):
     user_chose = ""
 
     while user_chose != '0':
-        rec_list_print =  f"Article: {', '.join(note.article.value)}", f"text_notes: {', '.join(note.text_note.value)}", f"Key words: {'; '.join(note.key_words.value)}"
-        list_fiel_text = f"\nArticle: {note.article.value}\n\nAdd to field:\n"
+        rec_list_print =  f"Article: {note.article.value}", f"text_notes: {note.text_note.value}", f"Key words: {(', ').join([i.value for i in note.key_words][0])}"
+        list_fiel_text = f"\nArticle: {note.article.value}\n\nAdd to note:\n"
         
         i = 1
         for items in rec_list_print:
             list_fiel_text += f"{i}: {items}\n"
             i += 1
 
-        list_fiel_text += f"\n>>> 0: Exit to main menu\n"
+        list_fiel_text += f"\n>>> 0: Exit to main menu\n 1: write text notes field\n 2: write kye words field\n"
 
         print(list_fiel_text)
-
+        
         user_chose = input("Select the field number to fill in: ").strip()
         user_chose = ADD_FUNC_DICT.get(str(user_chose), error_chose)
         user_chose = user_chose(note)
@@ -43,28 +42,21 @@ def write_in_field(notes_save: NotesSave, note : Notes):
         notes_save.add_record(note)
 
 def write_kye_words_field(note: Notes) -> None:
-    user_input = input("\n>>> 0: To enter the contact menu.\nWrite email number: ").strip()
+    user_input = input("\n>>> 0: To enter the notes menu.\n\nWrite keywords with a space: ").split(' ')
 
     if user_input == "0":
         return
 
-    if note.key_words == "":
-        note.key_words = [KeyWords(user_input).value]
-    else:
-        note.key_words.append(KeyWords(user_input).value)
+    note.key_words = [KeyWords(user_input)]
 
 
 def write_text_notes_field(note: Notes) -> None:
-    user_input = input("\n>>> 0: To enter the contact menu.\nWrite text notes: ")
+    user_input = input("\n>>> 0: To enter the notes menu.\nʼтWrite text notes: ").strip()
 
     if user_input == "0":
         return
 
-    if note.text_note == "":
-
-        note.text_note = [TextNote(user_input).value]
-    else:
-        note.text_note.append(TextNote(user_input).value)
+    note.text_note = TextNote(user_input)
 
 def error_chose(*_):
     return "\n<<<You chose invalid. Try again>>>"
@@ -73,8 +65,8 @@ def close_bot(*_):
     return "0"
 
 ADD_FUNC_DICT = {   "0" : close_bot, 
+                    "1" : write_text_notes_field,
                     "2" : write_kye_words_field,
-                    "5" : write_text_notes_field,
                 }
 
 
