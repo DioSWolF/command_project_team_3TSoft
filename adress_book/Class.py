@@ -6,7 +6,7 @@ import re
 
 class Field:
     def __init__(self, value):
-        self.__value = None
+        self.__value = ""
         self.value = value
 
 
@@ -14,11 +14,12 @@ class Name(Field):
     pass
 class Email(Field):
     pass
-class ArdessLive(Field):
+class AdressLive(Field):
     pass
 class Notes(Field):
     pass
-
+class Phone(Field):
+    pass
 
 class Birthday(Field):
     @property
@@ -30,46 +31,37 @@ class Birthday(Field):
         parse = " .,\/"
         for it in parse:
             value = value.replace(it, ".")
-        value = datetime.strptime(value ,"%d.%m.%Y")
+        if value != "":
+            try:
+                value = datetime.strptime(value ,"%d.%m.%Y")
+            except ValueError:
+                self.__value = ""
         self.__value = value
 
 
-class Phone(Field):
-    @property
-    def value(self):
-        return self.__value
 
-    @value.setter
-    def value(self, value):
-        new_value = re.findall(r"(?:\+\d{2})?\d{3,4}\D?\d{3}\D?\d{3}", value)
-        for i in new_value:
-            new_value = i
-        if len(value) >= 9 and len(new_value) > 0:
-            self.__value = new_value
-        else:
-            self.__value = None
 
 class Record:
-    def __init__(self, name: Name, phone: Phone = None, email: Email = None, ardess_live: ArdessLive = None, birthday: Birthday = None, notes: Notes = "") -> None:  
+    def __init__(self, name: Name, phone: Phone = None, email: Email = None, ardess_live: AdressLive = None, birthday: Birthday = None, notes: Notes = None) -> None:  
             self.name = name
             self.notes = notes
-
-            if phone is None:
-                self.phone = ""
+            
+            if phone == None:
+                self.phone = []
             else:
                 self.phone = phone
 
-            if email is None:
-                self.email = ""
+            if email == None:
+                self.email = []
             else:
                 self.email = email
 
-            if ardess_live is None:
-                self.ardess_live = ""
+            if phone == None:
+                self.ardess_live = []
             else:
                 self.ardess_live = ardess_live
 
-            if birthday is None:
+            if birthday == None:
                 self.birthday = ""
             else:
                 self.birthday = birthday
@@ -104,7 +96,7 @@ number_of_records = 0
 
 
 class Iterable:
-    def __init__(self, data, iter_number_of_records = None):
+    def __init__(self, data: AdressBook, iter_number_of_records = None):
         global number_of_records
         self.current_index = 0
         self.data = data
@@ -122,9 +114,17 @@ class Iterable:
             self.start_list_index += 1
             data_key = list(self.data.keys())
             data_value = list(self.data.values())
+            phone = data_value[self.start_list_index - 1].phone
+            email = data_value[self.start_list_index - 1].email
+            adress = data_value[self.start_list_index - 1].ardess_live
+            try:
+                birthday = data_value[self.start_list_index - 1].birthday.value.strftime('%d.%m.%Y')
+                print()
+            except AttributeError:
+                birthday = ""
             try:    
-                return data_key[self.start_list_index - 1], f"Name {data_key[self.start_list_index - 1]}, Phones: {', '.join(data_value[self.start_list_index - 1].phone)}; Email: {', '.join(data_value[self.start_list_index - 1].email)}; "\
-                    f"Adress: {', '.join(data_value[self.start_list_index - 1].ardess_live)}; Birthday date: {data_value[self.start_list_index - 1].birthday}; Notes: {'; '.join(data_value[self.start_list_index - 1].notes)};"
+                return data_key[self.start_list_index - 1], f"Name {data_key[self.start_list_index - 1]}, Phones: {', '.join([i.value for i in phone])}; Email: {', '.join([i.value for i in email])}; "\
+                    f"Adress: {', '.join([i.value for i in adress])}; Birthday date: {birthday}; Notes: {data_value[self.start_list_index - 1].notes.value};"
             except IndexError:
                 list_index = 0
                 raise StopIteration
@@ -132,3 +132,6 @@ class Iterable:
         if list_index >= len(self.data):
             list_index = 0
         raise StopIteration
+
+# f"Name {data_key[self.start_list_index - 1]}, Phones: {', '.join([i.value for i in phone])}; Email: {', '.join([i.value for i in email])}; "\
+# f"Adress: {', '.join([i.value for i in adress])}; Birthday date: {data_value[self.start_list_index - 1].birthday.value}; Notes: {data_value[self.start_list_index - 1].notes.value};"

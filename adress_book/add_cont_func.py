@@ -1,102 +1,97 @@
-from Class import Record, AdressBook, Name, Phone, Birthday, Email, ArdessLive, Notes, Iterable
+from Class import Record, AdressBook, Name, Phone, Birthday, Email, AdressLive, Notes, Iterable
+from show_find_logic import rec_list_print
+
 
 
 def add_contact(book:AdressBook):
-    name_cont = input("\n>>> 0 to enter the menu.\nWrite contact name: ").strip()
+    name_cont = input("\n>>> 0 to enter the menu.\n\n<< Write contact name: ").strip()
 
     if name_cont == "0":
         return 
 
     if name_cont in book:
-        return "\nYou have a contact with this name! Choose another name."
-
+        return "\n>>> You have a contact with this name! <<<\n"\
+               "       >>>Choose another name <<<"
     name_cont = Name(name_cont)
-    rec = Record(name_cont)
+    phone_cont = [Phone("")]
     
+    email_cont = [Email("")]
+    adress_cont = [AdressLive("")]
+    notes_cont = Notes("")
+    birthday_cont = Birthday("")
+    rec = Record(name_cont, phone_cont, email_cont, adress_cont, notes_cont, birthday_cont)
+    del rec.phone[0]
+    del rec.email[0]
+    del rec.ardess_live[0]
+
     book.add_record(rec)
 
-    return write_in_field(book, rec)
+    return write_field(book, rec)
 
-def write_in_field(book:AdressBook, rec: Record):
+def write_field(book:AdressBook, rec: Record):
     user_chose = ""
 
     while user_chose not in STOP_WORD:
-        rec_list_print =  f"Phones: {', '.join(rec.phone)}", f"Email: {', '.join(rec.email)}", f"Adress: {'; '.join(rec.ardess_live)}", \
-                            f"Birthday date: {rec.birthday}", f"Notes: {'; '.join(rec.notes)}"
-        list_fiel_text = f"\nContact name: {rec.name.value}\n\nAdd to field:\n"
-        
-        i = 1
-        for items in rec_list_print:
-            list_fiel_text += f"{i}: {items}\n"
-            i += 1
+        print(rec_list_print(rec))
 
-        list_fiel_text += f"\n>>> 0: Exit to main menu\n"
-
-        print(list_fiel_text)
-
-        user_chose = input("Select the field number to fill in: ").strip()
+        user_chose = input("<< Select the field number to fill in: ").strip()
         user_chose = ADD_FUNC_DICT.get(str(user_chose), error_chose)
         user_chose = user_chose(rec)
-        print(user_chose)
+        if user_chose != None:
+            print(user_chose)
         book.add_record(rec)
+    
 
-
-def write_phone_field(rec: Record) -> None:
-    user_input = input("\n>>> 0: To enter the contact menu.\n\nWrite phone number: ").strip()
+def write_phone(rec: Record) -> None:
+    user_input = input("\n>>> 0: To enter the contact menu.\n\n<< Write phone number: ").strip()
 
     if user_input == "0":
         return 
-
     user_input = user_input.split(" ")
+    if rec.phone == []:
+        rec.phone.extend([Phone(ph) for ph in user_input])
 
-    if rec.phone == "":
-        rec.phone = [Phone(ph).value for ph in user_input]
     else:
-        rec.phone.extend([Phone(ph).value for ph in user_input])
+        rec.phone.extend([Phone(ph) for ph in user_input])
 
-def write_email_field(rec: Record) -> None:
-    user_input = input("\n>>> 0: To enter the contact menu.\nWrite email number: ").strip()
+
+def write_email(rec: Record) -> None:
+    user_input = input("\n>>> 0: To enter the contact menu.\n\n<< Write email number: ").strip()
+
+    if user_input == "0":
+        return
+    user_input = user_input.split(" ")
+    if rec.email == []:
+        rec.email.extend(Email(em) for em in user_input)
+    else:
+        rec.email.extend(Email(em) for em in user_input)
+
+def write_ardess(rec: Record) -> None:
+    user_input = input("\n>>> 0: To enter the contact menu.\n\n<< Write adress: ").strip()
 
     if user_input == "0":
         return
 
-    if rec.email == "":
-        rec.email = [Email(user_input).value]
-    else:
-        rec.email.append(Email(user_input).value)
+    if rec.ardess_live == []:
+        rec.ardess_live.extend([AdressLive(user_input)])
 
-def write_ardess_field(rec: Record) -> None:
-    user_input = input("\n>>> 0: To enter the contact menu.\nWrite adress: ").strip()
+    else:
+        rec.ardess_live.extend([AdressLive(user_input)])
+
+def write_birthday(rec: Record) -> None:
+    user_input = input("\n>>> 0: To enter the contact menu.\n\n<< Write birthday: ").strip()
 
     if user_input == "0":
         return
+    rec.birthday = Birthday(user_input)
 
-    if rec.ardess_live == "":
-
-        rec.ardess_live = [ArdessLive(user_input).value]
-    else:
-        rec.ardess_live.append(ArdessLive(user_input).value)
-
-def write_birthday_field(rec: Record) -> None:
-    user_input = input("\n>>> 0: To enter the contact menu.\nWrite birthday: ").strip()
+def write_notes(rec: Record) -> None:
+    user_input = input("\n>>> 0: To enter the contact menu.\n\n<< Write notes: ").strip()
 
     if user_input == "0":
         return
-
-    if rec.birthday == "":
-        rec.birthday = Birthday(user_input).value.strftime('%d.%m.%Y')
-
-def write_notes_field(rec: Record) -> None:
-    user_input = input("\n>>> 0: To enter the contact menu.\nWrite notes: ").strip()
-
-    if user_input == "0":
-        return
-
-    if rec.notes == "":
-
-        rec.notes = [Notes(user_input).value]
-    else:
-        rec.notes.append(Notes(user_input).value)
+    rec.notes = Notes(user_input)
+  
 
 def close_bot(*_):
     return "exit"
@@ -104,12 +99,13 @@ def close_bot(*_):
 STOP_WORD = ("stop", "exit", "good bye")
 
 ADD_FUNC_DICT = {   "0" : close_bot,
-                    "1" : write_phone_field, 
-                    "2" : write_email_field,
-                    "3" : write_ardess_field,
-                    "4" : write_birthday_field,
-                    "5" : write_notes_field,
+                    "1" : write_phone, 
+                    "2" : write_email,
+                    "3" : write_ardess,
+                    "4" : write_birthday,
+                    "5" : write_notes,
                 }
 
 def error_chose(*_):
-    return "\n<<<You chose invalid. Try again>>>"
+    return  "\n>>> You chose invalid <<<\n"\
+            "     >>>Try again <<<\n"
