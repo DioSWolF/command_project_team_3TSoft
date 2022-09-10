@@ -1,6 +1,6 @@
 from collections import UserDict
 import pickle
-
+from datetime import datetime
 class Field:
     def __init__(self, value):
         self.__value = None
@@ -9,26 +9,36 @@ class Field:
 class Article(Field):
     pass
 
-class TextNotes(Field):
+class TextNote(Field):
     pass
 
 class KeyWords(Field):
     pass
+class DateNote(Field):
+    pass
 
 class Notes():
-    def __init__(self, article: Article, text_notes: TextNotes=None, key_words: KeyWords=None) -> None:
+    def __init__(self, article: Article, text_note: TextNote=None, key_words: KeyWords=None, date_note: DateNote=datetime.now()) -> None:
         self.article = article
-        self.text_notes = text_notes
-        self.key_words = key_words
+        self.date_note = date_note
     
+        if text_note is None:
+            self.text_note = ""
+        else:
+            self.text_note = text_note
+
+        if key_words is None:
+            self.key_words = ""
+        else:
+            self.key_words = key_words
     
 class NotesSave(UserDict):
     
     def add_record(self, notes: Notes)-> None:
-        self.data[notes.article.value] = [notes.text_notes, notes.key_words]
+        self.data[notes.article.value] = [notes.text_note, notes.key_words]
     
     def __repr__(self, notes: Notes) -> str:
-        return f'{notes.article}, {notes.text_notes}, {notes.key_words}'
+        return f'{notes.article}, {notes.text_note}, {notes.key_words}'
     
     def save_data(self):
         with open("data.bin", "wb") as file:

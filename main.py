@@ -1,13 +1,9 @@
 from typing import Callable, Dict
-from notes import Article, TextNotes, KeyWords, Notes, NotesSave
+from notes import Article, TextNote, KeyWords, Notes, NotesSave
 
-
-
-def exit_handler():  
-    raise SystemExit('Good bye!')
 
 def add_new_note():
-    article = input("\n>>> 0 to enter the menu.\nWrite article note: ").strip()
+    article = input("\n>>> 0 to enter the menu.\n\nWrite article note: ").strip()
 
     if article == "0":
         return
@@ -17,9 +13,9 @@ def add_new_note():
 
     article = Article(article)
 
-    text_notes = TextNotes(input('\nEnter text note: '))
-    key_words = KeyWords((input('\nEnter  key words note: ')).split(' '))
-    note = Notes(article, text_notes, key_words)
+    text_note = TextNote(input('\nWrite text note: '))
+    key_words = KeyWords((input('\nWrite key words note: ')).split(' '))
+    note = Notes(article, text_note, key_words)
     notes_save.add_record(note)
     
     return write_in_field(notes_save, note)
@@ -28,8 +24,8 @@ def write_in_field(notes_save: NotesSave, note : Notes):
     user_chose = ""
 
     while user_chose != '0':
-        rec_list_print =  f"Article: {', '.join(note.article)}", f"text_notes: {', '.join(note.text_notes)}", f"Key words: {'; '.join(note.key_words)}"
-        list_fiel_text = f"\nContact name: {note.article.value}\n\nAdd to field:\n"
+        rec_list_print =  f"Article: {', '.join(note.article.value)}", f"text_notes: {', '.join(note.text_note.value)}", f"Key words: {'; '.join(note.key_words.value)}"
+        list_fiel_text = f"\nArticle: {note.article.value}\n\nAdd to field:\n"
         
         i = 1
         for items in rec_list_print:
@@ -64,11 +60,11 @@ def write_text_notes_field(note: Notes) -> None:
     if user_input == "0":
         return
 
-    if note.text_notes == "":
+    if note.text_note == "":
 
-        note.text_notes = [TextNotes(user_input).value]
+        note.text_note = [TextNote(user_input).value]
     else:
-        note.text_notes.append(TextNotes(user_input).value)
+        note.text_note.append(TextNote(user_input).value)
 
 def error_chose(*_):
     return "\n<<<You chose invalid. Try again>>>"
@@ -81,6 +77,9 @@ ADD_FUNC_DICT = {   "0" : close_bot,
                     "5" : write_text_notes_field,
                 }
 
+
+def exit_handler():  
+    raise SystemExit('Good bye!')
 
 def note_change_time():
     pass
