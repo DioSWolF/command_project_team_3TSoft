@@ -53,10 +53,11 @@ def write_phone(rec: Record) -> None:
 
     else:
         rec.phone.extend([Phone(ph) for ph in user_input])
+    rec.phone = list(filter(lambda i: i.value != "", rec.phone))
     return
 
 def write_email(rec: Record) -> None:
-    user_input = input("\n>>> 0: To enter the contact menu.\n\n<< Write email number: ").strip()
+    user_input = input("\n>>> 0: To enter the contact menu.\n\n<< Write email: ").strip()
 
     if user_input == "0":
         return
@@ -65,6 +66,7 @@ def write_email(rec: Record) -> None:
         rec.email.extend(Email(em) for em in user_input)
     else:
         rec.email.extend(Email(em) for em in user_input)
+    rec.email = list(filter(lambda i: i.value != "", rec.email))
     return
 
 def write_ardess(rec: Record) -> None:
@@ -78,6 +80,7 @@ def write_ardess(rec: Record) -> None:
 
     else:
         rec.ardess_live.extend([AdressLive(user_input)])
+    rec.ardess_live = list(filter(lambda i: i.value != "", rec.ardess_live))
     return
 
 def write_birthday(rec: Record) -> None:

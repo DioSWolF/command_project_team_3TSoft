@@ -87,11 +87,14 @@ def rec_list_print(rec:Record, change_name: str = None) -> None:
         birthday = rec.birthday.value.strftime('%d.%m.%Y')
     except AttributeError:
         birthday = ""
+    rec.phone = list(filter(lambda i: i.value != "", rec.phone))
+    rec.email = list(filter(lambda i: i.value != "", rec.email))
+    rec.ardess_live = list(filter(lambda i: i.value != "", rec.ardess_live))
     if change_name == None:
-        rec_list =  f"Phones: {', '.join([i.value for i in rec.phone])}", f"Email: {', '.join([i.value for i in rec.email])}", f"Adress: {', '.join([i.value for i in rec.ardess_live])}", \
+        rec_list =  f"Phones: {', '.join([ph.value for ph in rec.phone])}", f"Email: {', '.join([em.value for em in rec.email])}", f"Adress: {', '.join([adr.value for adr in rec.ardess_live])}", \
                     f"Birthday date: {birthday}", f"Notes: {rec.notes.value}"
     else:
-        rec_list =  f"Name: {change_name.value}", f"Phones: {', '.join([i.value for i in rec.phone])}", f"Email: {', '.join([i.value for i in rec.email])}", f"Adress: {', '.join([i.value for i in rec.ardess_live])}", \
+        rec_list =  f"Name: {change_name.value}", f"Phones: {', '.join([ph.value for ph in rec.phone])}", f"Email: {', '.join([em.value for em in rec.email])}", f"Adress: {', '.join([adr.value for adr in rec.ardess_live])}", \
                     f"Birthday date: {birthday}", f"Notes: {rec.notes.value}" 
     
     list_text = f"\nContact name: {rec.name.value}\nChange field:\n"      

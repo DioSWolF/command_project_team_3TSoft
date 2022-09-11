@@ -1,20 +1,21 @@
+from calendar import month
 import pickle
-from Class import AdressBook, Record
+from Class import AdressBook, Record, Iterable
 from add_cont_func import add_contact
 from show_find_logic import show, show_all, find
 from change_cont_func import change_contact
 from del_func import delete_func
-import datetime
+from datetime import datetime
 
-def input_error(func):
-    def inner(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-        except FileNotFoundError:
+# def input_error(func):
+#     def inner(*args, **kwargs):
+#         try:
+#             return func(*args, **kwargs)
+#         except FileNotFoundError:
 
-            with open("data.bin", "rb") as file:
-                return pickle.load(file)
-    return inner
+#             with open("data.bin", "rb") as file:
+#                 return pickle.load(file)
+#     return inner
 
 def close(*_):
     return  "\n>>> You chose invalid <<<\n"\
@@ -28,11 +29,56 @@ def menu_help():
         i += 1
     return help_text
 
-def days_birthday(book, rec: Record):
-    now_date = datetime.now()
-    date_birthday = datetime(year = now_date.year, month = book[rec.name.value].birthday.value.month, day = book[rec.name.value].birthday.value.day)
-    days_birth = date_birthday - now_date
-    return rec.days_to_birthday(days_birth.days)
+def parse_birthday(book:AdressBook):
+    user_days = input("\n>>> 0: Exit to main menu.\n\n<< Enter the number of days to set the period for birthday showing list: ")
+
+    if user_days == "0":
+        return 
+
+    now = datetime.now()
+    j = 1
+    print_list = ""
+
+    Iterable(book)
+    for items in book:
+        rec, str_info = items
+        rec = book[rec]
+
+        i = 0
+        I = 0
+        zero_day = now.day
+        month_december = now.month
+        new_year = now.year
+        try:
+            user_days = int(user_days)
+        except ValueError:
+            return "\n>>> You wrote text, I need number! <<<"
+        while i <= user_days:
+
+            try:
+                date_birthday = (datetime(year=now.year, month =rec.birthday.value.month, day = rec.birthday.value.day)).strftime("%d %m")
+                find_day = (datetime(year = new_year, month = month_december, day = zero_day + I)).strftime("%d %m")
+
+            except ValueError:
+                if month_december == 12:
+                    month_december = 0
+                    new_year += 1
+                
+                month_december += 1
+                zero_day = 0
+                I = 0
+            except AttributeError:
+                break
+
+            if find_day == date_birthday:
+                print_list += f"\n> {j}) Name: {rec.name.value}, Birthday date: {rec.birthday.value.strftime('%A, %d %B %Y')}"
+                j += 1
+                break
+            i += 1            
+            I += 1
+    return print_list
+
+
 
 def main():
     user_input = ""
@@ -57,7 +103,8 @@ FUNC = {
         "3" : delete_func,                                                    
         "4" : find,                             
         "5" : show,                             
-        "6" : show_all,                        
+        "6" : show_all,
+        "7" : parse_birthday,                        
         }   
 
 HELP_DICT = {   
@@ -66,7 +113,8 @@ HELP_DICT = {
             "delete_func" : "Delete contact",                # delete {name}                   
             "find" : "Find similar",                    # find {text}
             "show" : "Show contact",                    # show {number}
-            "show_all" : "Show all contacts",           # show all           
+            "show_all" : "Show all contacts",           # show all   
+            "parse_birthday": "Show contact`s birthday dates"    
             }   
 
 

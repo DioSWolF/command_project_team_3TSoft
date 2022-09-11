@@ -12,14 +12,42 @@ class Field:
 
 class Name(Field):
     pass
-class Email(Field):
-    pass
 class AdressLive(Field):
     pass
 class Notes(Field):
     pass
 class Phone(Field):
-    pass
+    @property
+    def value(self):
+        return self.__value
+
+    @value.setter
+    def value(self, value): 
+        repl_list = """ QWERTYUIOP{}ASDFGHJKL:'ZXCVBNM<>?qwertyuiop[]asdfghjkl;\\'""zxcvbnm,./+-*|()@#$%№&^"""
+        for item in repl_list:
+            value = value.replace(item, "")
+        if len(value) > 7:
+            self.__value = value
+        else:
+            print(  "\n>>> You write invalid phone <<<\n"\
+                    ">>> Phone don`t change <<<")
+            self.__value = ""
+
+class Email(Field):
+    @property
+    def value(self):
+        return self.__value
+
+    @value.setter
+    def value(self, value): 
+        new_value = re.findall("[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+", value)
+        if len(new_value) >= 1:
+            self.__value = new_value
+        else:   
+            print(  "\n>>> You write invalid email <<<\n"\
+                    ">>> Email don`t change <<<")
+            self.__value = ""
+
 
 class Birthday(Field):
     @property
@@ -35,7 +63,7 @@ class Birthday(Field):
             try:
                 value = datetime.strptime(value ,"%d.%m.%Y")
             except ValueError:
-                print(  "\n>>> You write bad date <<<\n"\
+                print(  "\n>>> You write invalid date <<<\n"\
                         ">>> Date don`t change <<<")
                 self.__value = ""
         self.__value = value
