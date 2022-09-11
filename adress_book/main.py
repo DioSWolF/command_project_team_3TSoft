@@ -117,7 +117,11 @@ HELP_DICT = {
             "parse_birthday": "Show contact`s birthday dates"    
             }   
 
-
+def start_bot():
+    book = AdressBook()
+    book.load_data()    
+    main()
+    
 if __name__ == "__main__":
     book = AdressBook()
     book.load_data()    
