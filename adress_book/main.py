@@ -1,10 +1,10 @@
 import pickle
-from Class import AdressBook
+from Class import AdressBook, Record
 from add_cont_func import add_contact
 from show_find_logic import show, show_all, find
 from change_cont_func import change_contact
 from del_func import delete_func
-
+import datetime
 
 def input_error(func):
     def inner(*args, **kwargs):
@@ -28,6 +28,11 @@ def menu_help():
         i += 1
     return help_text
 
+def days_birthday(book, rec: Record):
+    now_date = datetime.now()
+    date_birthday = datetime(year = now_date.year, month = book[rec.name.value].birthday.value.month, day = book[rec.name.value].birthday.value.day)
+    days_birth = date_birthday - now_date
+    return rec.days_to_birthday(days_birth.days)
 
 def main():
     user_input = ""

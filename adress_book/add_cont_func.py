@@ -33,14 +33,14 @@ def write_field(book:AdressBook, rec: Record):
 
     while user_chose not in STOP_WORD:
         print(rec_list_print(rec))
-
         user_chose = input("<< Select the field number to fill in: ").strip()
         user_chose = ADD_FUNC_DICT.get(str(user_chose), error_chose)
         user_chose = user_chose(rec)
         if user_chose != None:
             print(user_chose)
         book.add_record(rec)
-    
+        book.save_data()
+    return
 
 def write_phone(rec: Record) -> None:
     user_input = input("\n>>> 0: To enter the contact menu.\n\n<< Write phone number: ").strip()
@@ -53,7 +53,7 @@ def write_phone(rec: Record) -> None:
 
     else:
         rec.phone.extend([Phone(ph) for ph in user_input])
-
+    return
 
 def write_email(rec: Record) -> None:
     user_input = input("\n>>> 0: To enter the contact menu.\n\n<< Write email number: ").strip()
@@ -65,6 +65,7 @@ def write_email(rec: Record) -> None:
         rec.email.extend(Email(em) for em in user_input)
     else:
         rec.email.extend(Email(em) for em in user_input)
+    return
 
 def write_ardess(rec: Record) -> None:
     user_input = input("\n>>> 0: To enter the contact menu.\n\n<< Write adress: ").strip()
@@ -77,6 +78,7 @@ def write_ardess(rec: Record) -> None:
 
     else:
         rec.ardess_live.extend([AdressLive(user_input)])
+    return
 
 def write_birthday(rec: Record) -> None:
     user_input = input("\n>>> 0: To enter the contact menu.\n\n<< Write birthday: ").strip()
@@ -84,6 +86,7 @@ def write_birthday(rec: Record) -> None:
     if user_input == "0":
         return
     rec.birthday = Birthday(user_input)
+    return
 
 def write_notes(rec: Record) -> None:
     user_input = input("\n>>> 0: To enter the contact menu.\n\n<< Write notes: ").strip()
@@ -91,7 +94,7 @@ def write_notes(rec: Record) -> None:
     if user_input == "0":
         return
     rec.notes = Notes(user_input)
-  
+    return
 
 def close_bot(*_):
     return "exit"

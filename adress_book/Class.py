@@ -35,6 +35,8 @@ class Birthday(Field):
             try:
                 value = datetime.strptime(value ,"%d.%m.%Y")
             except ValueError:
+                print(  "\n>>> You write bad date <<<\n"\
+                        ">>> Date don`t change <<<")
                 self.__value = ""
         self.__value = value
 
@@ -106,6 +108,7 @@ class Iterable:
         else:
             number_of_records = iter_number_of_records
         self.iter_number_of_records = number_of_records
+
         
     def __next__(self):
         global list_index
@@ -114,17 +117,19 @@ class Iterable:
             self.start_list_index += 1
             data_key = list(self.data.keys())
             data_value = list(self.data.values())
-            phone = data_value[self.start_list_index - 1].phone
-            email = data_value[self.start_list_index - 1].email
-            adress = data_value[self.start_list_index - 1].ardess_live
             try:
-                birthday = data_value[self.start_list_index - 1].birthday.value.strftime('%d.%m.%Y')
-                print()
-            except AttributeError:
-                birthday = ""
+                try:
+                    birthday = data_value[self.start_list_index - 1].birthday.value.strftime('%d.%m.%Y')
+                except AttributeError:
+                    birthday = ""
+                phone = data_value[self.start_list_index - 1].phone
+                email = data_value[self.start_list_index - 1].email
+                adress = data_value[self.start_list_index - 1].ardess_live
+            except IndexError:
+                number_of_records = len(self.data)
             try:    
-                return data_key[self.start_list_index - 1], f"Name {data_key[self.start_list_index - 1]}, Phones: {', '.join([i.value for i in phone])}; Email: {', '.join([i.value for i in email])}; "\
-                    f"Adress: {', '.join([i.value for i in adress])}; Birthday date: {birthday}; Notes: {data_value[self.start_list_index - 1].notes.value};"
+                return data_key[self.start_list_index  - 1], f"{data_key[self.start_list_index  - 1]}/||{', '.join([i.value for i in phone])}/||{', '.join([i.value for i in email])}/||"\
+                    f"{', '.join([i.value for i in adress])}/||{birthday}/||{data_value[self.start_list_index  - 1].notes.value}"
             except IndexError:
                 list_index = 0
                 raise StopIteration

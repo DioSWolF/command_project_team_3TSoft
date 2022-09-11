@@ -19,13 +19,15 @@ def take_contact(book: AdressBook, rec: Record) -> None:
 
     while user_chose not in STOP_WORD:
         print(rec_list_print(rec, rec.name))
-        user_chose = input("<< Select the field number to change it: ").strip()
+        user_chose = input(">> 7: Add new contect\n\n<< Select the field number to change it: ").strip()
         user_chose = CHANGE_FUNC_DICT.get(str(user_chose), error_chose)
         user_chose = user_chose(book, rec)
-        print(user_chose)
+        if user_chose != None:
+            user_chose
 
         book.add_record(rec)
-        
+        book.save_data()
+    return
 
 def change_name(book: AdressBook, rec:Record) -> None:
     user_input = input("\n>>> 0: To enter the contact menu.\n\n<< Write new name: ").strip()
@@ -39,7 +41,8 @@ def change_name(book: AdressBook, rec:Record) -> None:
     rec.name = Name(user_input)
     book.add_record(rec)
     del book[old_rec]
-    
+    return
+
 def add_phone(book:AdressBook, rec:Record): 
     write_phone(rec)
     return "\n>>> Phone added <<<"
@@ -63,6 +66,7 @@ def chose_phone(book: AdressBook, rec:Record) -> None:
         chose_phone = change_phone(rec, chose_phone)
         if chose_phone != None:
             print(chose_phone)
+    
 
 def change_phone(rec:Record, chose_old_phone:str) -> None:
     new_phone = input("\n>>> 0: To enter the contact menu.\n\n<< Write new phone: ").strip()
@@ -93,7 +97,7 @@ def chose_email(book: AdressBook, rec:Record) -> None:
         chose_email = change_email(rec, chose_email)
         if chose_email != None:
             print(chose_email)
-
+    
 
 def change_email(rec:Record, chose_old_email:str) -> None:
     new_email = input("\n>>> 0: To enter the contact menu.\n\n<< Write new email: ").strip()
@@ -124,7 +128,8 @@ def chose_adress(book: AdressBook, rec:Record) -> None:
         chose_adress = change_adress(rec, chose_adress)
         if chose_adress != None:
             print(chose_adress)
-
+    
+    
 def change_adress(rec:Record, chose_old_adress:str) -> None:
     new_adress = input("\n>>> 0: To enter the contact menu.\n\n<< Write new adress: ").strip()
     rec.ardess_live[chose_old_adress] = AdressLive(new_adress)
@@ -136,12 +141,10 @@ def change_birthday(book: AdressBook, rec:Record) -> None:
         return 
 
     user_input = user_input.strip()
-    try:
-        birthday = Birthday(user_input).value.strftime('%d.%m.%Y')
-    except ValueError:
-        return "\n>>> You write invalid birthday date! <<<" \
-               "\n   >>> Birthday date not change! <<<"
+    birthday = Birthday(user_input)
+
     rec.birthday = birthday
+    return None
 
 def change_Notes(book: AdressBook, rec:Record) -> None:
     user_input = input("\n>>> 0: To enter the contact menu.\n\n<< Write new name: ").strip()
@@ -149,7 +152,7 @@ def change_Notes(book: AdressBook, rec:Record) -> None:
         return 
     rec.notes = Notes(user_input)
     print("\n>>> Email change <<<")
-
+    return
 
 
 def error_chose(*_):
@@ -158,6 +161,7 @@ def error_chose(*_):
 
 def close_bot(*_):
     return "exit"
+
 CHANGE_FUNC_DICT = {
                     "0" : close_bot,                # ready
                     "1" : change_name,              # ready
@@ -166,6 +170,8 @@ CHANGE_FUNC_DICT = {
                     "4" : chose_adress,            #
                     "5" : change_birthday,          # ready
                     "6" : change_Notes,             #
+                    "7" : add_phone,
                     }
     
 STOP_WORD = ("0","stop", "exit", "good bye")
+                    # "2" : add_phone,

@@ -21,40 +21,40 @@ def delete_func(book:AdressBook):
             return 
         user_input = DEL_DICT.get(user_input, error_chose)
         user_input = user_input(book)
-        print(user_input)
-        
+        if user_input != None:
+            print(user_input)
+    
 
 def del_contact(book: AdressBook):
     rec_find = find_contact(book)
     if rec_find == "0":
         return 
-    user_ansver = input("\n<<< Do you want delet this contact? Chose Yes/Y or No/N: ")
+    user_ansver = input("\n<<< Do you want delet this contact? Chose Yes/Y to delete contact, else exit to the menu: ")
     if user_ansver.lower() == "yes" or user_ansver.lower() == "y":
         del book[rec_find.name.value]
     else:
-        return
+        return "\n >>> Contact don`t delete <<<"
     return "\n>>> Contact deleted <<<"
 
 def del_fields(book: AdressBook):
     rec_find = find_contact(book)
     if rec_find == "0":
         return 
-    while True:
+    while rec_find != "0":
         print(del_help_menu())
         user_input = input(">>> 0: To enter the contact menu.\n\n<<< Select what you want to delete in a contact: ")
         if user_input == "0":
             return  
         user_input = DELETE_FUNC_DICT.get(user_input, error_chose)
         user_input = user_input(book, rec_find)
-        
+    return 
+
 def del_phone(book: AdressBook, rec: Record):
     print(rec_list_print(rec))
     user_input = ""
-    while True:
-        if user_input == "0":
-            return  
+    while user_input != "0":
         if rec.phone == []:
-            print(">>> You need to added phone <<<")
+            print(">>> This contact don`t have phones <<<")
             return
         i = 1
         phone_text = "\n"
@@ -67,16 +67,15 @@ def del_phone(book: AdressBook, rec: Record):
             return
         chose_phone = int(user_input) - 1
         del rec.phone[chose_phone]
-        print("\n>>> Phone deleted <<<")
-        
+        print("\n>>> Phone deleted <<<\n")
+    return 
+
 def del_email(book: AdressBook, rec: Record):
     print(rec_list_print(rec))
     user_input = ""
-    while True:
-        if user_input == "0":
-            return  
+    while user_input != "0":
         if rec.email == []:
-            print(">>> You need to added email <<<")
+            print(">>> This contact don`t have email <<<")
             return
         i = 1
         email_text = "\n"
@@ -89,16 +88,16 @@ def del_email(book: AdressBook, rec: Record):
             return
         chose_email = int(user_input) - 1
         del rec.email[chose_email]
-        print("\n>>> Email deleted <<<")
-
+        print("\n>>> Email deleted <<<\n")
+    
 def del_adress(book: AdressBook, rec: Record):
     print(rec_list_print(rec))
     user_input = ""
-    while True:
+    while user_input != "0":
         if user_input == "0":
             return  
         if rec.ardess_live == []:
-            print(">>> You don`t have adress <<<")
+            print(">>> This contact don`t have adress <<<")
             return
         i = 1
         adress_text = "\n"
@@ -111,20 +110,21 @@ def del_adress(book: AdressBook, rec: Record):
             return
         chose_adress = int(user_input) - 1
         del rec.ardess_live[chose_adress]
-        print("\n>>> Adress deleted <<<")
-
+        print("\n>>> Adress deleted <<<\n")
+    
 def del_birthday(book: AdressBook, rec: Record):
     if rec.birthday.value == "":
-        print("\n>>> You don`t have birthday date <<<")
+        print("\n>>> This contact don`t have birthday date <<<")
     else:
         rec.birthday.value = ""
+    return "\n>>> Birthday date deleted <<<\n"
 
 def del_notes(book: AdressBook, rec: Record):
     if rec.notes.value == "":
-        print("\n>>> You don`t have notes <<<")
+        print("\n>>> This contact don`t have notes <<<")
     else:
         rec.notes = ""
-
+    return "\n>>> Notes deleted <<<\n"
 
 DEL_DICT =     { 
                     "1" : del_fields,
