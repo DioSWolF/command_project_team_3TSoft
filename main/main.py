@@ -1,5 +1,5 @@
-from notes.class_notes import NotesSave
-from notes.main_notes import main_by_notes
+# from notes.class_notes import NotesSave
+# from notes.main_notes import main_by_notes
 from typing import Callable, Dict
 
 
@@ -10,12 +10,13 @@ def sorted_boat():
     pass
 
 def notes_boat():
-    notes_save = NotesSave()
-    notes_save.load_data()
-    main_by_notes()
+    pass
+    # notes_save = NotesSave()
+    # notes_save.load_data()
+    # main_by_notes()
 
 def exit_handler():  
-    raise SystemExit('Good bye!')
+    raise SystemExit('\n<<< Good bye!>>>\n')
 
 COMMAND_HANDLERS: Dict[str, Callable] = {
     '0': exit_handler,
@@ -42,7 +43,7 @@ def parse_user_input(user_input: str):
     command = COMMAND_HANDLERS.get(user_input)
     if command != None:     
         return command()
-    raise ValueError('<<<Unknown command>>>')
+    return ('\n >>> Unknown command <<<')
 
 def main():
     while True:
@@ -50,7 +51,8 @@ def main():
         user_input = input('>>> 0: Exit to main menu\n\n<< Enter the command: ').strip()
         try:
             resalt = parse_user_input(user_input)
-            print(resalt)
+            if resalt != None:
+                print(resalt)
         except SystemExit as e:
             print(e)
             break
