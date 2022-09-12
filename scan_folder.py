@@ -176,7 +176,7 @@ def start_scan(path=None):
                                  # Запуск сортировки
 
 def close(*_):
-    return "\n>> Invalid chose"
+    return "\n>>> Invalid chose <<<"
 
 
 
