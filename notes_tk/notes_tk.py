@@ -7,6 +7,10 @@ new_article_notes = ""
 new_text_notes = ""
 new_tags_notes = ""
 
+"""
+тестовый комментарий
+"""
+
 
 def record_article():
 
