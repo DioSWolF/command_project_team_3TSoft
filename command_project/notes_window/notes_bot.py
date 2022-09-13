@@ -1,7 +1,8 @@
 from operator import attrgetter
 from tkinter import *
-from .add_change_window import createNewWindow, start_read_notes
-from .class_notes import NotesSave
+from turtle import width
+from add_change_window import createNewWindow, start_read_notes
+from class_notes import NotesSave
 
 
 #********************************** FIND BY TEXT ********************************
@@ -149,7 +150,7 @@ def main_input(notes_form):
     leblel_article = Label(master=notes_form, text="Введите текст для поиска:")
     find_article = Text(master=notes_form, width=37, height= 6)
 
-    find_article.insert("1.0", article)
+    find_article.insert("1.0", article_incert)
 
     btn_find_article = Button(master=notes_form, text="По артикулам", width=15, command=find_by_article)
     btn_find_tegs = Button(master=notes_form, text="По тегам", width=15, command=finde_by_key_words)
@@ -203,9 +204,9 @@ def find_input(notes_form):
     text_input = Text(master=notes_form, width=37, height=6)
     btn_read = Button(master=notes_form, text="Прочтения", width=15, command=read_notes)
     btn_change = Button(master=notes_form, text="Изменения", width=15, command=change_chose_notes)
-    btn_delete = Button(master=notes_form, text="Удаления", width=15, command=delete_note)
+    btn_delete = Button(master=notes_form, text="Удаления", width=15, command=confirm_chose)
 
-    text_input.insert("1.0", tags)
+    text_input.insert("1.0", tags_incert)
 
     leblel_find_input.grid(row=16, column=0)
 
@@ -234,47 +235,95 @@ def change_chose_notes():
     createNewWindow(notes_save, name)
 
 def new_window():
-    createNewWindow(notes_save)
+    createNewWindow(notes_save, new_notes_flag="")
 
-article = "--Заголовок--- "
-text_incert = "--Текст поиска--"
-tags = "--Тег--"
+article_incert = "---Текст для поиска---"
+tags_incert = "---Теги---"
+
+#************************************* ERROR and AXIT ***************************
 
 
 def error_wind(*_):
     global error_glob
     error_glob = Toplevel()
-    labelExample = Label(error_glob, text = "New Window")
-    buttonExample = Button(error_glob, text = "New Window button", command=exit_menu)
-    labelExample.pack()
-    buttonExample.pack()
+    error_glob.geometry("+1000+500") 
+    
+    btn_submit = Button(master=error_glob, text="Неверное название статьи", width=20, height=3,command=exit_menu)
+    btn_submit.pack(padx=10, ipadx=10)
+
     error_glob.mainloop()
+
+
+
+
+
+#***************************************** Confirm window *********************
+
+def confirm_chose(*_):
+    global error_glob
+    error_glob = Toplevel()
+    error_glob.geometry("200x60+900+450") 
+
+    btn_submit = Button(master=error_glob, text="Подтвердить", width=8, command=delete_note)
+    btn_submit.pack(side=RIGHT, padx=10, ipadx=10)
+
+    btn_clear = Button(master=error_glob, text="Отменить", width=8, command=exit_menu)
+    btn_clear.pack(side=RIGHT, padx=10, ipadx=10)
+    error_glob.mainloop()
+    
+
+
 
 def exit_menu():
     notes_save.save_data()
     error_glob.destroy()
 
-#********************************* Delete article *******************************
-def delete_note():
+def confirm_exit(*_):
+    global error_glob
+    error_glob = Toplevel()
+    error_glob.geometry("+850+500") 
 
+    btn_submit = Button(master=error_glob, text="Выйти", command=exit, width=10)
+    btn_submit.pack(side=RIGHT, ipadx=10, padx=10, pady=7, ipady=7)
+
+    btn_clear = Button(master=error_glob, text="Отменить", command=exit_menu, width=10)
+    btn_clear.pack(side=RIGHT, ipadx=10, padx=10, pady=7, ipady=7)
+
+    error_glob.mainloop()
+
+#********************************* Delete article *******************************
+def confirm_chose(*_):
+    global error_glob
+    error_glob = Toplevel()
+    error_glob.geometry("200x60+900+450") 
+
+    btn_submit = Button(master=error_glob, text="Подтвердить", width=8, command=delete_note)
+    btn_submit.pack(side=RIGHT, padx=10, ipadx=10)
+
+    btn_clear = Button(master=error_glob, text="Отменить", width=8, command=exit_menu)
+    btn_clear.pack(side=RIGHT, padx=10, ipadx=10)
+    error_glob.mainloop()
+
+def delete_note():
     key_note = text_input.get(1.0, END+"-1c")
     try:
         del notes_save[key_note]
     except KeyError:
         error_wind()  
         return
-
+    exit_menu()
 
 #********************************** EXIT functions and BUTTON ********************************
 def btn_exit(notes_form):
     
-    btn_exit = Button(master=notes_form, text="Выход с заметок", width=20, height=4, command=exit)
+    btn_exit = Button(master=notes_form, text="Выход с заметок", width=20, height=4, command=confirm_exit)
     btn_exit.grid(row=17, rowspan=3, column=3)
 
-def exit():
+def exit_save():
     notes_save.save_data()
     main_window.destroy()
-
+def exit_save():
+    main_window.destroy()
 def start_bot():
     global notes_save
     notes_save = NotesSave()
@@ -295,4 +344,4 @@ def read_notes():
 
 
 
-
+start_bot()
