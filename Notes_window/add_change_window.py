@@ -125,11 +125,11 @@ def add_new_note(result_artilce: str):
     time_add = DateNote(datetime.now())
 
     note = Notes(article, text_note, key_words, time_add)
-
-    del notes_save[old_name]
+    try:
+        del notes_save[old_name]
+    except KeyError:
+        pass
     old_name = result_artilce
-
-
     return save_info(notes_save, note)
 
 def save_info(notes_save: NotesSave, note : Notes):   
