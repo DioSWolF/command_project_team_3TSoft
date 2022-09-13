@@ -40,6 +40,7 @@ def find_by_article():
 
 def finde_by_text_note():
     name = find_article.get(1.0, END+"-1c")
+    print(name)
     notes_list = []
     a = ""
     for note in notes_save.values():
@@ -56,7 +57,7 @@ def finde_by_text_note():
 
 
 def finde_by_key_words():
-    name = find_article.get(1.0, END+"-1c").split(" ")
+    name = find_article.get(1.0, END+"-1c").strip().split(" ")
     notes_list = []
     a = ""
     
@@ -120,8 +121,8 @@ def main_input(notes_form):
     find_article.insert("1.0", article)
 
     btn_find_article = Button(master=notes_form, text="По артикулам", width=15, command=find_by_article)
-    btn_find_tegs = Button(master=notes_form, text="По тегам", width=15, command=finde_by_text_note)
-    btn_find_text = Button(master=notes_form, text="По тексту", width=15, command=finde_by_key_words)
+    btn_find_tegs = Button(master=notes_form, text="По тегам", width=15, command=finde_by_key_words)
+    btn_find_text = Button(master=notes_form, text="По тексту", width=15, command=finde_by_text_note)
     btn_show_all = Button(master=notes_form, text="Показать все записи", width=15, command=show_all)
 
     leblel_article.grid(row=2, column=0)
