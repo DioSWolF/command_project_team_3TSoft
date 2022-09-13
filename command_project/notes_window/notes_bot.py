@@ -1,8 +1,7 @@
 from operator import attrgetter
 from tkinter import *
-from turtle import width
-from add_change_window import createNewWindow, start_read_notes
-from class_notes import NotesSave
+from .add_change_window import createNewWindow, start_read_notes
+from .class_notes import NotesSave
 
 
 #********************************** FIND BY TEXT ********************************

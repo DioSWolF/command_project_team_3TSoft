@@ -14,9 +14,6 @@ def sorted_bot():
 def notes_bot():
     start_notes()
 
-    # notes_save = NotesSave()
-    # notes_save.load_data()
-    # main_by_notes()
 
 def exit_handler():  
     raise SystemExit('\n<<< Good bye!>>>\n')

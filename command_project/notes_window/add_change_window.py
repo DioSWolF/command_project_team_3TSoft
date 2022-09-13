@@ -1,6 +1,6 @@
 from datetime import datetime
 from tkinter import *
-from class_notes import TextNote, KeyWords, Article, Notes, NotesSave, DateNote
+from .class_notes import TextNote, KeyWords, Article, Notes, NotesSave, DateNote
 
 #********************************** Window config ****************************    
 
