@@ -33,7 +33,7 @@ def find_by_article():
         a += f"> {i}) " + "".join(item)
         i += 1
     text.configure(state="normal")
-    text.delete("0.1", END)
+    # text.delete("0.1", END)
     text.insert("1.0", a)
    
     return  text.configure(state='disabled')
@@ -56,12 +56,14 @@ def finde_by_text_note():
 
 
 def finde_by_key_words():
-    name = find_article.get(1.0, END+"-1c")
+    name = find_article.get(1.0, END+"-1c").split(" ")
     notes_list = []
     a = ""
+    
     for note in notes_save.values():
-        if name in note.key_words.value:
-            notes_list.append(f'{("").join(note.article.value)} \n' )
+        for tags in name:
+            if tags in note.key_words.value:
+                notes_list.append(f'{("").join(note.article.value)} \n' )
     i = 1
     for item in notes_list:
         a += f"> {i}) " + "".join(item)
@@ -75,19 +77,29 @@ def finde_by_key_words():
 
 def show_all():
     notes_list = []
+    a = ""
     for note in notes_save.values():
-        notes_list.append(note.article.value)
-    return f'\n{(", ").join(notes_list)}'
+        notes_list.append(f'{("").join(note.article.value)} \n' )
+        i = 1
+    for item in notes_list:
+        a += f"> {i}) " + "".join(item)
+        i += 1
+    text.configure(state="normal")
+    text.delete("0.1", END)
+    text.insert("1.0", a)
+    return  text.configure(state='disabled')
 
-
+ 
 
 #********************************** MAIN WINDOW FIELDS and BUTTON ********************************
 
 def main_windw():
     global main_window
+    global a
     main_window = Tk()
     main_window.title("Заметка")
     notes_form = Frame(relief=SUNKEN, borderwidth=5)
+    a = notes_form
     main_window.geometry("+750+300")   
     notes_form.pack()
     main_input(notes_form)
@@ -110,13 +122,14 @@ def main_input(notes_form):
     btn_find_article = Button(master=notes_form, text="По артикулам", width=15, command=find_by_article)
     btn_find_tegs = Button(master=notes_form, text="По тегам", width=15, command=finde_by_text_note)
     btn_find_text = Button(master=notes_form, text="По тексту", width=15, command=finde_by_key_words)
+    btn_show_all = Button(master=notes_form, text="Показать все записи", width=15, command=show_all)
 
     leblel_article.grid(row=2, column=0)
     find_article.grid(row=2, column=1, rowspan=4)
     btn_find_article.grid(row=3,column=0)
     btn_find_tegs.grid(row=4,column=0)
     btn_find_text.grid(row=5,column=0)
-
+    btn_show_all.grid(row=6,column=0)
 def main_print(notes_form):
     pass_lbl = Label(master=notes_form, text="", height=2)
     pass_lbl.grid(row=6, rowspan=2, column=0, columnspan=3)
@@ -136,12 +149,14 @@ def main_print(notes_form):
 
 def print_find_text(notes_form):
     global text
-    text = Text(master=notes_form, width=37, height=8)
+    a.pack(side=LEFT)
+    text = Text(master=a, width=37, height=8)
     text.configure(state='disabled')
     text.grid(row=8,column=1, rowspan= 6)
 
     scroll = Scrollbar(command=text.yview)
-    scroll.pack(side=LEFT , fill=Y)
+    scroll.pack(side=LEFT, fill=Y)
+
     text.config(yscrollcommand=scroll.set)
 
 def find_input(notes_form):
@@ -191,8 +206,8 @@ def new_window():
     createNewWindow(notes_save)
 
 article = "--Заголовок--- "
-text_incert = "--Текст--"
-tags = "#Тег"
+text_incert = "--Текст поиска--"
+tags = "--Тег--"
 
 
 def error_wind(*_):
