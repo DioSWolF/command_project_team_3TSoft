@@ -342,7 +342,3 @@ def read_notes():
     start_read_notes(notes_save, name)
 
 
-
-
-
-start_bot()
