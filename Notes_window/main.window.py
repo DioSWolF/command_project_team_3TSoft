@@ -261,7 +261,7 @@ def delete_note():
     try:
         del notes_save[key_note]
     except KeyError:
-        error_wind  
+        error_wind()  
         return
 
 
