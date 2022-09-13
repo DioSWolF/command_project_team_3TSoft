@@ -85,6 +85,8 @@ def delete_text():
     text_note = TextNote("")
     try:
         notes_save[key_note].text_note = text_note
+        time_add = DateNote(datetime.now())
+        notes_save[key_note].date_note = time_add
         notes_save.save_data()
     except KeyError:
         error_wind()
@@ -98,9 +100,12 @@ def delete_key_words():
     key_words = KeyWords("")
     try:
         notes_save[key_note].key_words = key_words
+        time_add = DateNote(datetime.now())
+        notes_save[key_note].date_note = time_add
+        notes_save.save_data()
     except KeyError:
         error_wind()
-    notes_save.save_data()
+
     return new_tags_notes
 
 #********************************** Added functions ****************************   
@@ -117,8 +122,8 @@ def add_new_note(result_artilce: str):
     
     text_note = TextNote(text_form.get(1.0, END+"-1c"))
     key_words = KeyWords(ent_tags.get())
-
     time_add = DateNote(datetime.now())
+
     note = Notes(article, text_note, key_words, time_add)
 
     del notes_save[old_name]
@@ -133,7 +138,7 @@ def save_info(notes_save: NotesSave, note : Notes):
 
 
 
-#********************************** Delete functions ****************************   
+#********************************** Write functions ****************************   
 
 def write_text_notes_field(result_text):
 
@@ -142,6 +147,8 @@ def write_text_notes_field(result_text):
     text_note = TextNote(result_text)
     try:
         notes_save[key_note].text_note = text_note
+        time_add = DateNote(datetime.now())
+        notes_save[key_note].date_note = time_add
     except KeyError:
         error_wind()
     notes_save.save_data()
@@ -154,6 +161,8 @@ def write_key_words_field(result_keys):
     key_words = KeyWords(result_keys)
     try:
         notes_save[key_note].key_words = key_words
+        time_add = DateNote(datetime.now())
+        notes_save[key_note].date_note = time_add
     except KeyError:
         error_wind()    
     notes_save.save_data()

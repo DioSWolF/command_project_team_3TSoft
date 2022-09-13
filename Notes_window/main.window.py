@@ -20,7 +20,7 @@ def find_by_article():
         a += f"> {i}) " + "".join(item)
         i += 1
     text.configure(state="normal")
-    # text.delete("0.1", END)
+    text.delete("0.1", END)
     text.insert("1.0", a)
    
     return  text.configure(state='disabled')
@@ -158,7 +158,7 @@ def find_input(notes_form):
     text_input = Text(master=notes_form, width=37, height=6)
     btn_read = Button(master=notes_form, text="Прочтения", width=15, command=read_notes)
     btn_change = Button(master=notes_form, text="Изменения", width=15, command=change_chose_notes)
-    btn_delete = Button(master=notes_form, text="Удаления", width=15)
+    btn_delete = Button(master=notes_form, text="Удаления", width=15, command=delete_note)
 
     text_input.insert("1.0", tags)
 
@@ -209,6 +209,17 @@ def exit_menu():
     notes_save.save_data()
     error_glob.destroy()
 
+#********************************* Delete article *******************************
+def delete_note():
+
+    key_note = text_input.get(1.0, END+"-1c")
+    del notes_save[key_note]
+
+
+
+
+
+
 #********************************** EXIT functions and BUTTON ********************************
 def btn_exit(notes_form):
     
@@ -235,3 +246,8 @@ def read_notes():
         return
     start_read_notes(notes_save, name)
 start_bot()
+
+
+
+
+
