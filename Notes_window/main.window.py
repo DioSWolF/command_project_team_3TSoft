@@ -14,10 +14,10 @@ def find_by_article():
 
     for note in notes_save.values():
         if name in note.article.value:
-            notes_list.append(f'{("").join(note.article.value)} \n' )
+            notes_list.append(f'{("").join(note.article.value)}\n ' )
     i = 1
     for item in notes_list:
-        a += f"> {i}) " + "".join(item)
+        a += f"> " + "".join(item)
         i += 1
     text.configure(state="normal")
     text.delete("0.1", END)
@@ -34,13 +34,12 @@ def finde_by_text_note():
             notes_list.append(f'{("").join(note.article.value)} \n' )
     i = 1
     for item in notes_list:
-        a += f"> {i}) " + "".join(item)
+        a += f"> " + "".join(item)
         i += 1
     text.configure(state="normal")
     text.delete("0.1", END)
     text.insert("1.0", a)
     return  text.configure(state='disabled')
-
 
 def finde_by_key_words():
     name = find_article.get(1.0, END+"-1c").strip().split(" ")
@@ -53,30 +52,76 @@ def finde_by_key_words():
                 notes_list.append(f'{("").join(note.article.value)} \n' )
     i = 1
     for item in notes_list:
-        a += f"> {i}) " + "".join(item)
+        a += f"> " + "".join(item)
         i += 1
     text.configure(state="normal")
     text.delete("0.1", END)
     text.insert("1.0", a)
     return  text.configure(state='disabled')
-
-
 
 def show_all():
     notes_list = []
     a = ""
     for note in notes_save.values():
-        notes_list.append(f'{("").join(note.article.value)} \n' )
+        notes_list.append(f'{("").join(note.article.value)}' )
         i = 1
     for item in notes_list:
-        a += f"> {i}) " + "".join(item)
+        a += "".join(item)
         i += 1
     text.configure(state="normal")
     text.delete("0.1", END)
-    text.insert("1.0", a)
+    text.insert("1.0", "\n".join(notes_list))
     return  text.configure(state='disabled')
 
  
+#************************************* SORTER FUNCTIONS **************************************
+
+clic_alfavit = 0
+def sort_click_alfavit():
+    global clic_alfavit
+    if clic_alfavit == 1:
+        sorted_alfavit(reverse=True)
+        clic_alfavit = 0
+    else:
+        sorted_alfavit(reverse=False)
+        clic_alfavit += 1
+
+def sorted_alfavit(reverse):
+    name = text.get(1.0, END+"-1c").strip().split("\n")
+    sorted_list = sorted(name, reverse=reverse)
+
+    text.configure(state="normal")
+    text.delete("0.1", END)
+    text.insert("1.0", "\n".join(sorted_list))
+    return  text.configure(state='disabled')
+
+
+clic_date = 0
+def sort_click_date():
+    global clic_alfavit
+    if clic_alfavit == 1:
+        sorted_by_date(reverse=True)
+        clic_alfavit = 0
+    else:
+        sorted_by_date(reverse=False)
+        clic_alfavit += 1
+
+def sorted_by_date(reverse):
+    name_article = text.get(1.0, END+"-1c").strip().split("\n")
+    new_sort_list = []
+    for name in name_article:
+        new_sort_list.append(notes_save[name])
+
+    sort = sorted(new_sort_list, key=attrgetter('date_note.value'), reverse=reverse)
+
+    sorted_list = []
+    for i in sort:
+        sorted_list.append(i.article.value)
+    text.configure(state="normal")
+    text.delete("0.1", END)
+    text.insert("1.0", "\n".join(sorted_list))
+    return  text.configure(state='disabled')
+
 
 #********************************** MAIN WINDOW FIELDS and BUTTON ********************************
 
@@ -124,16 +169,16 @@ def main_print(notes_form):
     leblel_article = Label(master=notes_form, text="Найденые статьи: ", width=15)
     leblel_sort = Label(master=notes_form, text="Сортировка: ", width=15)
     
-    btn_sort_alfavit = Button(master=notes_form, text="По алфавиту", width=15)
-    btn_sort_date = Button(master=notes_form, text="По дате изменения", width=15)
-    btn_sort_similar = Button(master=notes_form, text="По совпадениям", width=15)
+    btn_sort_alfavit = Button(master=notes_form, text="По алфавиту", width=15, command=sort_click_alfavit)
+    btn_sort_date = Button(master=notes_form, text="По дате изменения", width=15, command=sort_click_date)
+
 
     leblel_article.grid(row=8, column=0)
     leblel_sort.grid(row=9,column=0)
 
     btn_sort_alfavit.grid(column=0)
     btn_sort_date.grid(column=0)
-    btn_sort_similar.grid(column=0)
+
 
 def print_find_text(notes_form):
     global text
@@ -213,11 +258,11 @@ def exit_menu():
 def delete_note():
 
     key_note = text_input.get(1.0, END+"-1c")
-    del notes_save[key_note]
-
-
-
-
+    try:
+        del notes_save[key_note]
+    except KeyError:
+        error_wind  
+        return
 
 
 #********************************** EXIT functions and BUTTON ********************************
