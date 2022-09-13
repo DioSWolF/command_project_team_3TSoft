@@ -2,7 +2,7 @@ from genericpath import exists, isdir, isfile
 from os import mkdir, remove, rmdir, rename, listdir, startfile
 from pathlib import Path
 import shutil
-import sys
+
 
 USER_PATH = ""                                      # Адрес чистки папки
 

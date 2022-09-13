@@ -128,6 +128,7 @@ def sorted_by_date(reverse):
 def main_windw():
     global main_window
     global a
+
     main_window = Tk()
     main_window.title("Заметка")
     notes_form = Frame(relief=SUNKEN, borderwidth=5)
