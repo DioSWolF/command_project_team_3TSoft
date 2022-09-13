@@ -24,27 +24,53 @@ def find_by_article():
     name = find_article.get(1.0, END+"-1c")
     notes_list = []
     a = ""
+
     for note in notes_save.values():
         if name in note.article.value:
-            notes_list.append(note.article.value)
-    a += f'\n{(", ").join(notes_list)}' 
-    return # find_article.insert("1.0", a)
+            notes_list.append(f'{("").join(note.article.value)} \n' )
+    i = 1
+    for item in notes_list:
+        a += f"> {i}) " + "".join(item)
+        i += 1
+    text.configure(state="normal")
+    text.delete("0.1", END)
+    text.insert("1.0", a)
+   
+    return  text.configure(state='disabled')
 
 def finde_by_text_note():
     name = find_article.get(1.0, END+"-1c")
     notes_list = []
+    a = ""
     for note in notes_save.values():
         if name in note.text_note.value:
-            notes_list.append(note.article.value)
-    return f'\n{(", ").join(notes_list)}'
+            notes_list.append(f'{("").join(note.article.value)} \n' )
+    i = 1
+    for item in notes_list:
+        a += f"> {i}) " + "".join(item)
+        i += 1
+    text.configure(state="normal")
+    text.delete("0.1", END)
+    text.insert("1.0", a)
+    return  text.configure(state='disabled')
+
 
 def finde_by_key_words():
     name = find_article.get(1.0, END+"-1c")
     notes_list = []
+    a = ""
     for note in notes_save.values():
         if name in note.key_words.value:
-            notes_list.append(note.article.value)
-    return f'\n{(", ").join(notes_list)}'
+            notes_list.append(f'{("").join(note.article.value)} \n' )
+    i = 1
+    for item in notes_list:
+        a += f"> {i}) " + "".join(item)
+        i += 1
+    text.configure(state="normal")
+    text.delete("0.1", END)
+    text.insert("1.0", a)
+    return  text.configure(state='disabled')
+
 
 
 def show_all():
