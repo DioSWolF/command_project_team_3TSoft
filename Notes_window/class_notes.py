@@ -18,7 +18,7 @@ class DateNote(Field):
     pass
 
 class Notes():
-    def __init__(self, article: Article, text_note: TextNote=None, key_words: KeyWords=None, date_note: DateNote=datetime.now()) -> None:
+    def __init__(self, article: Article, text_note: TextNote=None, key_words: KeyWords=None, date_note: DateNote=None) -> None:
         self.article = article
         self.date_note = date_note
     

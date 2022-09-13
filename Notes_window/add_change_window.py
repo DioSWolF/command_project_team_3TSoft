@@ -1,55 +1,79 @@
+from datetime import datetime
 from tkinter import *
-from class_notes import TextNote, KeyWords, Article, Notes, NotesSave
+from class_notes import TextNote, KeyWords, Article, Notes, NotesSave, DateNote
 
 #********************************** Window config ****************************    
 
-def article_field(notes_form):
+
+
+
+def article_field(notes_form, flag = None):
     global ent_article
+    if flag == None:
+        ent_article = Entry(master=notes_form, width=47)
+        ent_article.insert(0, notes_save[find_article].article.value) 
+        ent_article.configure(state='disabled')
+    else:   
+        btn_article_insert = Button(master=notes_form, text="Записать", command=getArticleInput)
+        ent_article = Entry(master=notes_form, width=47)
+        btn_article_insert.grid(row=0, column=2)
     lbl_article = Label(master=notes_form, text="Заголовок:")
-    ent_article = Entry(master=notes_form, width=47)
-    
+
     try:
         ent_article.insert(0, notes_save[find_article].article.value) 
     except KeyError:
         pass
-    # ent_article.insert(1, "dioswolf")   ****************    ввод текста в поле заголовка(для восстановления)
-    btn_article_insert = Button(master=notes_form, text="Записать", command=getArticleInput)
-    # btn_article_delete = tk.Button(master=notes_form, text="Удалить", command=)
+
     lbl_article.grid(row=0, column=0, sticky="e")
     ent_article.grid(row=0, column=1)
-    btn_article_insert.grid(row=0, column=2)
-    # btn_article_delete.grid(row=0, column=3)
 
-def text_fiel(notes_form):
+
+def text_fiel(notes_form, flag = None):
     global text_form
+    if flag == None:
+        text_form = Text(master=notes_form, width=35, height=15)
+        text_form.insert("1.0", notes_save[find_article].text_note.value) 
+        text_form.configure(state='disabled')
+    else:   
+        text_form = Text(master=notes_form, width=35, height=15)
+        btn_tags_insert = Button(master=notes_form, text="Записать", command=getTextInput)
+        btn_tags_delete = Button(master=notes_form, text="Удалить", command=delete_text)
+        btn_tags_insert.grid(row=2, column=2)
+        btn_tags_delete.grid(row=2, column=3)
+
     text_lbl = Label(master=notes_form, text="Заметка:")
-    text_form = Text(master=notes_form, width=35, height=15)
+    
     try:
         text_form.insert("1.0", notes_save[find_article].text_note.value) 
     except:
         pass
-    btn_tags_insert = Button(master=notes_form, text="Записать", command=getTextInput)
-    btn_tags_delete = Button(master=notes_form, text="Удалить", command=delete_text)
+
     text_lbl.grid(row=2, column=0, sticky="e")
     text_form.grid(row=2, column=1)
-    btn_tags_insert.grid(row=2, column=2)
-    btn_tags_delete.grid(row=2, column=3)
 
-def keywords_field(notes_form):
+def keywords_field(notes_form, flag = None):
     global ent_tags
+    if flag == None:
+        ent_tags = Entry(master=notes_form, width=47)
+        ent_tags.insert(0, notes_save[find_article].key_words.value) 
+        ent_tags.configure(state='disabled')
+    else:   
+        ent_tags = Entry(master=notes_form, width=47)
+        btn_tags_insert = Button(master=notes_form, text="Записать", command=getKeywordsInput)
+        btn_tags_delete = Button(master=notes_form, text="Удалить", command=delete_key_words)
+        btn_tags_insert.grid(row=3, column=2)
+        btn_tags_delete.grid(row=3, column=3)
+
     lbl_tags = Label(master=notes_form, text="Теги:")
-    ent_tags = Entry(master=notes_form, width=47)
+
     try:
         ent_tags.insert(0, notes_save[find_article].key_words.value) 
     except:
         pass
     # ent_article.insert(1, "dioswolf")   ****************    ввод текста в поле тегов(для восстановления)
-    btn_tags_insert = Button(master=notes_form, text="Записать", command=getKeywordsInput)
-    btn_tags_delete = Button(master=notes_form, text="Удалить", command=delete_key_words)
+
     lbl_tags.grid(row=3, column=0, sticky="e")
     ent_tags.grid(row=3, column=1)
-    btn_tags_insert.grid(row=3, column=2)
-    btn_tags_delete.grid(row=3, column=3)
 
 #********************************** Delete functions ****************************    
 
@@ -83,13 +107,24 @@ def delete_key_words():
 
 
 def add_new_note(result_artilce: str):
+    global old_name
+
     for keys, item in notes_save.items():
         if result_artilce == item.article.value:
-            return
+            return error_wind
+    
     article = Article(result_artilce)
-    text_note = TextNote("")
-    key_words = KeyWords("")
-    note = Notes(article, text_note, key_words)
+    
+    text_note = TextNote(text_form.get(1.0, END+"-1c"))
+    key_words = KeyWords(ent_tags.get())
+
+    time_add = DateNote(datetime.now())
+    note = Notes(article, text_note, key_words, time_add)
+
+    del notes_save[old_name]
+    old_name = result_artilce
+
+
     return save_info(notes_save, note)
 
 def save_info(notes_save: NotesSave, note : Notes):   
@@ -128,8 +163,8 @@ def write_key_words_field(result_keys):
 #********************************** GET TEXT functions ********************************
 
 
-
 def getArticleInput():
+    global old_name
     result_artilce = ent_article.get()
     return add_new_note(result_artilce)
 
@@ -173,23 +208,45 @@ def exit_menu():
 
 
 def start_window_notes(_):
-
+    flag = ""
     newWindow = _
     newWindow.geometry("+800+320")  
-    article_field(newWindow)
-    text_fiel(newWindow)
-    keywords_field(newWindow)
+    article_field(newWindow, flag)
+    text_fiel(newWindow, flag)
+    keywords_field(newWindow, flag)
     btn_exit(newWindow)
     newWindow.mainloop()
 
 def createNewWindow(notes_data, article=None):
     global find_article
+    global old_name
+    old_name = article
     find_article = article
     global notes_save
     notes_save = notes_data
     notes_save.load_data()
     global newWindow
     newWindow = Toplevel()
-    
     start_window_notes(newWindow)
 
+def read(newWindow):
+    newWindow.geometry("+800+320")  
+    # text_form.configure(state='disabled')
+    # ent_tags.configure(state='disabled')
+    article_field(newWindow)
+    text_fiel(newWindow)
+    keywords_field(newWindow)
+    btn_exit(newWindow)
+    newWindow.mainloop()
+
+def start_read_notes(notes_data, article=None):
+    global find_article
+    global old_name
+    old_name = article
+    find_article = article
+    global notes_save
+    notes_save = notes_data
+    notes_save.load_data()
+    global newWindow
+    newWindow = Toplevel()
+    read(newWindow)

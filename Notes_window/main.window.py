@@ -1,26 +1,13 @@
+from operator import attrgetter
 from tkinter import *
-from add_change_window import createNewWindow
+from add_change_window import createNewWindow, start_read_notes
 from class_notes import NotesSave
-# def print_result(result):
-#     print(result)
 
-# def getArticleInput():
-#     result= find_article.get(1.0, tk.END+"-1c")
-#     return print_result(result)
-
-# def getTextInput():
-#     result= find_article.get(1.0, tk.END+"-1c")
-#     return print_result(result)
-
-# def getKeywordsInput():
-#     result= find_article.get(1.0, tk.END+"-1c")
-#     return print_result(result)
 
 #********************************** FIND BY TEXT ********************************
 
 
 def find_by_article():
-    global a
     name = find_article.get(1.0, END+"-1c")
     notes_list = []
     a = ""
@@ -40,7 +27,6 @@ def find_by_article():
 
 def finde_by_text_note():
     name = find_article.get(1.0, END+"-1c")
-    print(name)
     notes_list = []
     a = ""
     for note in notes_save.values():
@@ -131,6 +117,7 @@ def main_input(notes_form):
     btn_find_tegs.grid(row=4,column=0)
     btn_find_text.grid(row=5,column=0)
     btn_show_all.grid(row=6,column=0)
+
 def main_print(notes_form):
     pass_lbl = Label(master=notes_form, text="", height=2)
     pass_lbl.grid(row=6, rowspan=2, column=0, columnspan=3)
@@ -169,7 +156,7 @@ def find_input(notes_form):
     
     leblel_find_input = Label(master=notes_form, text="Введите название статьи для:")
     text_input = Text(master=notes_form, width=37, height=6)
-    btn_read = Button(master=notes_form, text="Прочтения", width=15)
+    btn_read = Button(master=notes_form, text="Прочтения", width=15, command=read_notes)
     btn_change = Button(master=notes_form, text="Изменения", width=15, command=change_chose_notes)
     btn_delete = Button(master=notes_form, text="Удаления", width=15)
 
@@ -202,8 +189,6 @@ def change_chose_notes():
     createNewWindow(notes_save, name)
 
 def new_window():
-
-
     createNewWindow(notes_save)
 
 article = "--Заголовок--- "
@@ -240,4 +225,13 @@ def start_bot():
     notes_save.load_data()
     main_windw()
 
+
+def read_notes():
+    name = text_input.get(1.0, END+"-1c").strip()
+    try:
+        notes_save[name]
+    except KeyError:
+        error_wind()
+        return
+    start_read_notes(notes_save, name)
 start_bot()
