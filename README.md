@@ -1,3 +1,4 @@
+
 # **PERSONAL ASSISTANT**
 ###### goit python group project - group № 10 
 ###### group name - "3TSoft"
@@ -124,3 +125,6 @@
 
 ------------
 ‎
+=======
+# command_project_team_3TSoft
+
