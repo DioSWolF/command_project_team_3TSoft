@@ -1,9 +1,12 @@
 from genericpath import exists, isdir, isfile
-from os import mkdir, remove, rmdir, rename, listdir, system, startfile
+from os import mkdir, remove, rmdir, rename, listdir
 from pathlib import Path
 import shutil
 import subprocess
 import sys
+if sys.platform == "win32":
+    from os import startfile
+
 
 USER_PATH = ""                                      # Адрес чистки папки
 
