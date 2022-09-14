@@ -11,7 +11,6 @@ from .class_notes import NotesSave
 def find_by_article():
     name = find_article.get(1.0, END+"-1c")
     notes_list = []
-    a = ""
 
     for note in notes_save.values():
         if name in note.article.value:
