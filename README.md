@@ -73,16 +73,14 @@
 | **`>>> 0: To exit in main menu.`** | повернутися у головне меню|
 |||
 |**2) Робота з нотатками**||
-|||
 
 ------------
 
-<p align="center">
+ <p align="center">
 <img src="https://github.com/AndriiTruba/-pictures/blob/main/menu_notes.png">
 </p>
 
 ------------
-|||
 | **`Write text to find`** | Введіть текст для пошуку нотаток: |
 | `- By article`  | пошук по назві |
 | `- By tags`  | пошук по тегам(ключовим словам) |
@@ -99,7 +97,6 @@
 | `- Delete`  | видалення нотатки |
 |||
 | **`> 1) Add new article`** | додати нову замітку: |
-|||
 
 ------------
 
