@@ -1,4 +1,5 @@
 from operator import attrgetter
+import sys
 from tkinter import *
 from .add_change_window import createNewWindow, start_read_notes
 from .class_notes import NotesSave
@@ -131,7 +132,10 @@ def main_windw():
 
     main_window = Tk()
     main_window.title("Article")
-    main_window.iconbitmap(r'notes_window\imj.ico')
+    if sys.platform == "win32":
+        main_window.iconbitmap(r'notes_window\imj.ico')
+    else:
+        main_window.iconbitmap(r'notes_window/imj.ico')
     notes_form = Frame(relief=SUNKEN, borderwidth=5)
     a = notes_form
     main_window.geometry("+750+300")   
