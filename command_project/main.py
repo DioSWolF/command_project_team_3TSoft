@@ -54,7 +54,8 @@ def main():
             if resalt != None:
                 print(resalt)
         except SystemExit as e:
-            print(e)
+            if resalt != None:
+                print(e)
             break
 
 if __name__ == "__main__":

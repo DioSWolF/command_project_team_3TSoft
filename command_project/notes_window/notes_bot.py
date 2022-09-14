@@ -16,59 +16,46 @@ def find_by_article():
     for note in notes_save.values():
         if name in note.article.value:
             notes_list.append(f'{("").join(note.article.value)}\n ' )
-    i = 1
-    for item in notes_list:
-        a += f"> " + "".join(item)
-        i += 1
+
     text.configure(state="normal")
     text.delete("0.1", END)
-    text.insert("1.0", a)
+    text.insert("1.0", "\n".join(notes_list))
    
     return  text.configure(state='disabled')
 
 def finde_by_text_note():
     name = find_article.get(1.0, END+"-1c")
     notes_list = []
-    a = ""
+
     for note in notes_save.values():
         if name in note.text_note.value:
             notes_list.append(f'{("").join(note.article.value)} \n' )
-    i = 1
-    for item in notes_list:
-        a += f"> " + "".join(item)
-        i += 1
+
     text.configure(state="normal")
     text.delete("0.1", END)
-    text.insert("1.0", a)
+    text.insert("1.0", "\n".join(notes_list))
     return  text.configure(state='disabled')
 
 def finde_by_key_words():
     name = find_article.get(1.0, END+"-1c").strip().split(" ")
     notes_list = []
-    a = ""
     
     for note in notes_save.values():
         for tags in name:
             if tags in note.key_words.value:
                 notes_list.append(f'{("").join(note.article.value)} \n' )
-    i = 1
-    for item in notes_list:
-        a += f"> " + "".join(item)
-        i += 1
+
     text.configure(state="normal")
     text.delete("0.1", END)
-    text.insert("1.0", a)
+    text.insert("1.0", "\n".join(notes_list))
     return  text.configure(state='disabled')
 
 def show_all():
     notes_list = []
-    a = ""
+
     for note in notes_save.values():
         notes_list.append(f'{("").join(note.article.value)}' )
-        i = 1
-    for item in notes_list:
-        a += "".join(item)
-        i += 1
+
     text.configure(state="normal")
     text.delete("0.1", END)
     text.insert("1.0", "\n".join(notes_list))
@@ -111,8 +98,10 @@ def sorted_by_date(reverse):
     name_article = text.get(1.0, END+"-1c").strip().split("\n")
     new_sort_list = []
     for name in name_article:
-        new_sort_list.append(notes_save[name])
-
+        try:
+            new_sort_list.append(notes_save[name])
+        except:
+            pass
     sort = sorted(new_sort_list, key=attrgetter('date_note.value'), reverse=reverse)
 
     sorted_list = []
@@ -128,16 +117,16 @@ def sorted_by_date(reverse):
 
 def main_windw():
     global main_window
-    global a
-
+    global error_window_pack
     main_window = Tk()
     main_window.title("Article")
     if sys.platform == "win32":
-        main_window.iconbitmap(r'notes_window\imj.ico')
-    else:
-        main_window.iconbitmap(r'notes_window/imj.ico')
+        try:
+            main_window.iconbitmap(r'notes_window\imj.ico')
+        except:
+            pass
     notes_form = Frame(relief=SUNKEN, borderwidth=5)
-    a = notes_form
+    error_window_pack = notes_form
     main_window.geometry("+750+300")   
     notes_form.pack()
     main_input(notes_form)
@@ -188,8 +177,8 @@ def main_print(notes_form):
 
 def print_find_text(notes_form):
     global text
-    a.pack(side=LEFT)
-    text = Text(master=a, width=37, height=8)
+    error_window_pack.pack(side=LEFT)
+    text = Text(master=error_window_pack, width=37, height=8)
     text.configure(state='disabled')
     text.grid(row=8,column=1, rowspan= 6)
 
@@ -288,7 +277,7 @@ def confirm_exit(*_):
     error_glob = Toplevel()
     error_glob.geometry("+850+500") 
 
-    btn_submit = Button(master=error_glob, text="Exit", command=exit, width=10)
+    btn_submit = Button(master=error_glob, text="Exit", command=exit_save, width=10)
     btn_submit.pack(side=RIGHT, ipadx=10, padx=10, pady=7, ipady=7)
 
     btn_clear = Button(master=error_glob, text="Return", command=exit_menu, width=10)
@@ -327,8 +316,7 @@ def btn_exit(notes_form):
 def exit_save():
     notes_save.save_data()
     main_window.destroy()
-def exit_save():
-    main_window.destroy()
+
 def start_bot():
     global notes_save
     notes_save = NotesSave()
