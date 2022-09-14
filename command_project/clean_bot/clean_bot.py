@@ -1,8 +1,9 @@
 from genericpath import exists, isdir, isfile
-from os import mkdir, remove, rmdir, rename, listdir, startfile
+from os import mkdir, remove, rmdir, rename, listdir, system, startfile
 from pathlib import Path
 import shutil
-
+import subprocess
+import sys
 
 USER_PATH = ""                                      # Адрес чистки папки
 
@@ -103,7 +104,7 @@ def remove_file(folder, path):
 
 
 def scan_folder(path):         # Основное тело скрипта(сортировка и переименование)
-    # path = Path(path)
+
     for folder in path.iterdir():
         if folder.name in suffix_list["new_folder"]:
             continue                                # Исключение конечных папок сортировки
@@ -114,9 +115,11 @@ def scan_folder(path):         # Основное тело скрипта(сор
             except OSError:
                 rename(folder, (path/normalize(folder.name))) 
         elif folder.is_file():                      # Сортировка файлов
-            all_expan.add(folder.suffix)        
-            remove_file(folder, path)
-    
+            all_expan.add(folder.suffix)  
+            try:      
+                remove_file(folder, path)
+            except FileNotFoundError:
+                pass
 
 def print_name_def(path):        # Вывод результатов
     
@@ -155,15 +158,14 @@ def print_name_def(path):        # Вывод результатов
         for item in all_files_folder:
             for res in item:
                 file.write(f"{res}\n")
-        file.write("| {:<100} |\n".format(f"Ather expanding"))
+        file.write("| {:<100} |\n".format(f"Оther expanding"))
         file.write("| {:^100} |\n".format(f"{set(ather_expan)}"))
         file.write("| {:<100} |\n".format(f"All expanding"))
         file.write("| {:^100} |".format(f"{set(all_expan)}"))
-    return "\n>>> Chek your scan folder or use menu options <<<"
+    return print("\n>>> Chek your scan folder or use menu options <<<")
 
 
 def start_scan(path=None):    
-    print(path)
     if USER_PATH == "": 
         return "\n>>>>>> WRITE FOLDER ADRESS!!! <<<<<<\n>>>>>> WRITE FOLDER ADRESS!!! <<<<<<\n>>>>>> WRITE FOLDER ADRESS!!! <<<<<<"                         # Функция запуска сортировки
     if path is None:
@@ -196,6 +198,8 @@ def write_path(*_):
     global USER_PATH
     user_input = ""
     while user_input != "0":
+        if user_input == "0":
+            return
         user_input = input("\n>>> 0: To enter the contact menu.\n\n<< Write folder adress to work whis it: ").strip()
         if user_input == "0":
             return
@@ -216,14 +220,21 @@ def print_help():
 
 def open_folder(path):
     try:
-        startfile(path)
+        if sys.platform == "win32":
+            startfile(path)
+        else:
+            subprocess.call(['open', path])
     except:
         return "\n>>> This folder don`t find! <<<"
     
 
 def open_file(path):
     try:
-        startfile(f"{path}\\result_scan.txt")
+        if sys.platform == "win32":
+            startfile(f"{path}\\result_scan.txt")
+        else:
+            FileName = f"{path}/result_scan.txt"
+            subprocess.call(['open', FileName])
     except FileNotFoundError:
         return "\n>>> You don`t clean this folder! <<<"
 
@@ -244,5 +255,4 @@ CLEAN_DICT =    {
 
 def start_clean_bot():
     main()
-
 

@@ -14,22 +14,22 @@ def article_field(notes_form, read_flag = None, new_notes_flag=None):
     elif new_notes_flag=="":
         ent_article = Entry(master=notes_form, width=47)
 
-        btn_article_insert = Button(master=notes_form, width=11, text="Сохранить", command=getArticleInput)
+        btn_article_insert = Button(master=notes_form, width=11, text="Save", command=getArticleInput)
         btn_article_insert.grid(row=0, column=2)
-        btn_articlet_delete = Button(master=notes_form, width=11, text="Очистить текст", command=delete_article)
+        btn_articlet_delete = Button(master=notes_form, width=11, text="Clean text", command=delete_article)
         btn_articlet_delete.grid(row=0, column=4)
 
 
     else:   
         ent_article = Entry(master=notes_form, width=47)
 
-        btn_article_recover = Button(master=notes_form, width=11, text="Восстановить", command=artical_return_text)
-        btn_article_insert = Button(master=notes_form, width=11, text="Сохранить", command=getArticleInput)
+        btn_article_recover = Button(master=notes_form, width=11, text="Restore", command=artical_return_text)
+        btn_article_insert = Button(master=notes_form, width=11, text="Save", command=getArticleInput)
              
         btn_article_insert.grid(row=0, column=2)
         btn_article_recover.grid(row=0, column=3)
    
-    lbl_article = Label(master=notes_form, text="Заголовок:")
+    lbl_article = Label(master=notes_form, text="Article:")
 
     try:
         ent_article.insert(0, notes_save[find_article].article.value) 
@@ -48,22 +48,22 @@ def text_fiel(notes_form, read_flag = None,  new_notes_flag=None):
         text_form.configure(state='disabled')
     elif new_notes_flag == "":
 
-        btn_text_insert = Button(master=notes_form, width=11, text="Сохранить", command=getArticleInput)
-        btn_text_delete = Button(master=notes_form, width=11, text="Очистить текст", command=delete_text)
+        btn_text_insert = Button(master=notes_form, width=11, text="Save", command=getArticleInput)
+        btn_text_delete = Button(master=notes_form, width=11, text="Clean text", command=delete_text)
         btn_text_insert.grid(row=2, column=2)
         btn_text_delete.grid(row=2, column=4)
 
     else:   
-        btn_text_recover = Button(master=notes_form, width=11, text="Восстановить", command=text_return_text)
-        btn_text_insert = Button(master=notes_form, width=11, text="Сохранить", command=getTextInput)
-        btn_text_delete = Button(master=notes_form, width=11, text="Очистить текст", command=delete_text)
+        btn_text_recover = Button(master=notes_form, width=11, text="Restore", command=text_return_text)
+        btn_text_insert = Button(master=notes_form, width=11, text="Save", command=getTextInput)
+        btn_text_delete = Button(master=notes_form, width=11, text="Clean text", command=delete_text)
         btn_text_insert.grid(row=2, column=2)
         btn_text_recover.grid(row=2, column=3)
         btn_text_delete.grid(row=2, column=4)
 
     text_form = Text(master=notes_form, width=35, height=15)
 
-    text_lbl = Label(master=notes_form, text="Заметка:")
+    text_lbl = Label(master=notes_form, text="Notes:")
     
     try:
         text_form.insert("1.0", notes_save[find_article].text_note.value) 
@@ -82,22 +82,22 @@ def keywords_field(notes_form, read_flag = None, new_notes_flag=None):
 
     elif new_notes_flag == "":
 
-        btn_tags_insert = Button(master=notes_form, width=11, text="Сохранить", command=getArticleInput)
-        btn_tags_delete = Button(master=notes_form, width=11, text="Очистить текст", command=delete_tags)
+        btn_tags_insert = Button(master=notes_form, width=11, text="Save", command=getArticleInput)
+        btn_tags_delete = Button(master=notes_form, width=11, text="Clean text", command=delete_tags)
         btn_tags_insert.grid(row=3, column=2)
         btn_tags_delete.grid(row=3, column=4) 
 
     else:   
 
-        btn_tags_recover = Button(master=notes_form, width=11, text="Восстановить", command=tags_return_text)
-        btn_tags_insert = Button(master=notes_form, width=11, text="Сохранить", command=getKeywordsInput)
-        btn_tags_delete = Button(master=notes_form, width=11, text="Очистить текст", command=delete_tags)
+        btn_tags_recover = Button(master=notes_form, width=11, text="Restore", command=tags_return_text)
+        btn_tags_insert = Button(master=notes_form, width=11, text="Save", command=getKeywordsInput)
+        btn_tags_delete = Button(master=notes_form, width=11, text="Clean text", command=delete_tags)
 
         btn_tags_recover.grid(row=3, column=3)
         btn_tags_insert.grid(row=3, column=2)
         btn_tags_delete.grid(row=3, column=4)    
     ent_tags = Entry(master=notes_form, width=47)
-    lbl_tags = Label(master=notes_form, text="Теги:")
+    lbl_tags = Label(master=notes_form, text="Tags:")
 
     try:
         ent_tags.insert(0, notes_save[find_article].key_words.value) 
@@ -221,7 +221,7 @@ def exit():
 def btn_exit(notes_form):
     pass_lbl = Label(master=notes_form, text="", height=2)
     pass_lbl.grid(row=4, rowspan=2, column=2)
-    btn_exit = Button(master=notes_form, text="Выход с заметок", width=20, height=3, command=exit)
+    btn_exit = Button(master=notes_form, text="Exit", width=20, height=3, command=exit)
     btn_exit.grid(row=6, rowspan=4, column=3, columnspan=3)
 
 
@@ -229,7 +229,7 @@ def error_wind(*_):
     global error_glob
     error_glob = Toplevel()
     error_glob.geometry("+1000+500") 
-    btn_submit = Button(master=error_glob, text="Неверное название статьи", width=20, height=3,command=exit_menu)
+    btn_submit = Button(master=error_glob, text="Wrong article name", width=20, height=3,command=exit_menu)
     btn_submit.pack(padx=10, ipadx=10)
     error_glob.mainloop()
 
