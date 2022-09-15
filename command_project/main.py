@@ -49,6 +49,7 @@ def main():
     while True:
         print(menu_help())
         user_input = input('>>> 0: Exit to main menu\n\n<< Enter the command: ').strip()
+        resalt = None
         try:
             resalt = parse_user_input(user_input)
             if resalt != None:
