@@ -14,7 +14,7 @@ def find_by_article():
 
     for note in notes_save.values():
         if name in note.article.value:
-            notes_list.append(f'{("").join(note.article.value)}\n ' )
+            notes_list.append(f'{("").join(note.article.value)}')
 
     text.configure(state="normal")
     text.delete("0.1", END)
@@ -28,7 +28,7 @@ def finde_by_text_note():
 
     for note in notes_save.values():
         if name in note.text_note.value:
-            notes_list.append(f'{("").join(note.article.value)} \n' )
+            notes_list.append(f'{("").join(note.article.value)}')
 
     text.configure(state="normal")
     text.delete("0.1", END)
@@ -42,7 +42,7 @@ def finde_by_key_words():
     for note in notes_save.values():
         for tags in name:
             if tags in note.key_words.value:
-                notes_list.append(f'{("").join(note.article.value)} \n' )
+                notes_list.append(f'{("").join(note.article.value)}')
 
     text.configure(state="normal")
     text.delete("0.1", END)
@@ -53,7 +53,7 @@ def show_all():
     notes_list = []
 
     for note in notes_save.values():
-        notes_list.append(f'{("").join(note.article.value)}' )
+        notes_list.append(f'{("").join(note.article.value)}')
 
     text.configure(state="normal")
     text.delete("0.1", END)
