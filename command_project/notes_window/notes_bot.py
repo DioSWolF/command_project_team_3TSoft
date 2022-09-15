@@ -7,7 +7,6 @@ from .class_notes import NotesSave
 
 #********************************** FIND BY TEXT ********************************
 
-
 def find_by_article():
     name = find_article.get(1.0, END+"-1c")
     notes_list = []
