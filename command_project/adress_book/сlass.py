@@ -42,7 +42,7 @@ class Email(Field):
     def value(self, value): 
         new_value = re.findall("[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+", value)
         if len(new_value) >= 1:
-            self.__value = new_value
+            self.__value = new_value[0]
         else:   
             print(  "\n>>> You write invalid email <<<\n"\
                     ">>> Email don`t change <<<")
