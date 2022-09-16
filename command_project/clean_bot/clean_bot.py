@@ -24,18 +24,18 @@ suffix_list = {
 
 
 
-def path_images(path):
-    return f"{path}/images"
-def path_videos(path):
-    return f"{path}/videos"
-def path_documents(path):
-    return f"{path}/documents"
-def path_audios(path):
-    return f"{path}/audios"
-def path_archives(path):
-    return f"{path}/archives"
-def path_x_files(path):
-    return f"{path}/x_files"
+def path_images():
+    return f"{USER_PATH}/images"
+def path_videos():
+    return f"{USER_PATH}/videos"
+def path_documents():
+    return f"{USER_PATH}/documents"
+def path_audios():
+    return f"{USER_PATH}/audios"
+def path_archives():
+    return f"{USER_PATH}/archives"
+def path_x_files():
+    return f"{USER_PATH}/x_files"
 
 
 
@@ -73,7 +73,7 @@ adres_folder_list = {
             "arh" : path_archives,
             "x_files" : path_x_files,
 }
-def remove_file(folder, path):
+def remove_file(folder):
     i = 0
     adres_folder = None
     for type_file, file_exts in suffix_list.items():
@@ -83,31 +83,33 @@ def remove_file(folder, path):
     if (folder.suffix).lower() in suffix_list["arh"]:
         new_name = (folder.name).split(".")
         new_name = normalize(str(new_name[:-1]))
-        while exists(f"{adres_folder_list[adres_folder](path)}/{new_name}"):
+        while exists(f"{adres_folder_list[adres_folder]()}/{new_name}"):
+            
             new_name = (folder.name).split(".")
             new_name = normalize(str(new_name[:-1]) + f"({i})")
             i += 1 
-        shutil.unpack_archive(folder, f"{adres_folder_list[adres_folder](path)}/{new_name}")
+        shutil.unpack_archive(folder, f"{adres_folder_list[adres_folder]()}/{new_name}")
         remove(folder)
     elif adres_folder is None:
         ather_expan.add(folder.suffix)      # Список неизвестных расширений
         new_name = folder.name
-        while exists(f"{adres_folder_list['x_files'](path)}/{new_name}"):
+        while exists(f"{adres_folder_list['x_files']()}/{new_name}"):
             new_name = (f"({i})" + str(folder.name))
             i += 1
-        shutil.move(folder, f"{adres_folder_list['x_files'](path)}/{new_name}")
+        shutil.move(folder, f"{adres_folder_list['x_files']()}/{new_name}")
     else:
+
         new_name = (folder.name).split(".")
         new_name = normalize(str(new_name[:-1])) + "." + new_name[-1]
-        while exists(f"{adres_folder_list[adres_folder](path)}/{new_name}"):
+        print(f"{adres_folder_list[adres_folder]()}/{new_name}")
+        while exists(f"{adres_folder_list[adres_folder]()}/{new_name}"):
             new_name = (folder.name).split(".")
             new_name = normalize(str(new_name[:-1])) + f"({i})" + "." + new_name[-1]
             i += 1
-        shutil.move(folder, f"{adres_folder_list[adres_folder](path)}/{new_name}")
+        shutil.move(folder, f"{adres_folder_list[adres_folder]()}/{new_name}")
 
 
 def scan_folder(path):         # Основное тело скрипта(сортировка и переименование)
-
     for folder in path.iterdir():
         if folder.name in suffix_list["new_folder"]:
             continue                                # Исключение конечных папок сортировки
@@ -120,7 +122,7 @@ def scan_folder(path):         # Основное тело скрипта(сор
         elif folder.is_file():                      # Сортировка файлов
             all_expan.add(folder.suffix)  
             try:      
-                remove_file(folder, path)
+                remove_file(folder)
             except FileNotFoundError:
                 pass
 
@@ -141,7 +143,7 @@ def print_name_def(path):        # Вывод результатов
     x_files_name.append("| {:<100} |".format("File in x_files"))
     
     for type_file, folder_adr in adres_folder_list.items():
-        for file in Path(adres_folder_list[type_file](path)).iterdir():
+        for file in Path(adres_folder_list[type_file]()).iterdir():
             if type_file == "image":
                 archives_name.append("| {:^100} |".format(file.name))
             if type_file == "video":
@@ -192,6 +194,7 @@ def main():
         user_input = input(">>> 0: Exit to main menu.\n\n<< Chose you command: ")
         if user_input == "0":
             return 
+        print(USER_PATH)
         user_input = CLEAN_DICT.get(user_input, close)
         user_input = user_input(USER_PATH)
         if user_input != None:
@@ -259,3 +262,4 @@ CLEAN_DICT =    {
 def start_clean_bot():
     main()
 
+start_clean_bot()
