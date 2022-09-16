@@ -262,4 +262,3 @@ CLEAN_DICT =    {
 def start_clean_bot():
     main()
 
-start_clean_bot()
