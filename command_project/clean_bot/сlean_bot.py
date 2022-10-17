@@ -219,7 +219,7 @@ def main():
     user_input = ""
     while user_input != 0:
         print_help()
-        user_input = input(">>> 0: Exit to main menu.\n\n<< Chose you command: ")
+        user_input = input(">>> 0: Exit to main menu.\n\n<< Chose you command: ").strip()
         if user_input == "0":
             return 
         user_input = CLEAN_DICT.get(user_input, close)

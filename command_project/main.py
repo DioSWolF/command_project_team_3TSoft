@@ -1,5 +1,5 @@
 from typing import Callable, Dict
-from clean_bot.clean_bot import start_clean_bot
+from clean_bot.сlean_bot import start_clean_bot
 from adress_book.adressbook_bot import start_bot
 from notes_window.notes_bot import start_bot as start_notes
 
